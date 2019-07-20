@@ -23,6 +23,7 @@
   color: #61dafb;
 }
 
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -30,4 +31,61 @@
   to {
     transform: rotate(360deg);
   }
+}
+:root{
+  --primary-color:#03a7a7;
+}
+.back-primary{
+  background-color: var(--primary-color);
+}
+.slick-prev:before,
+.slick-next:before
+{
+    color: var(--primary-color) !important; 
+    outline: none;
+    background: transparent;
+    font-size: 30px !important;
+    
+}
+.slick-prev{
+  left:10px !important;
+  z-index: 99;
+}
+.slick-next{
+  right: 17px !important;
+  z-index: 99;
+}
+.slick-dots{
+  bottom: 5px !important;
+}
+.slick-dots li button:before{
+  color: var(--primary-color) !important;
+}
+.slick-dots li.slick-active button:before{
+  color: var(--primary-color) !important
+}
+/* navbar */
+.navbar-posisi{
+  position: fixed;
+  top: 0;
+  left:0;
+  right: 0;
+  z-index: 99;
+}
+body{
+/* background-color: yellow !important  */
+
+}
+/* div{
+  border: 1px solid orange
+} */
+.carousel-control-prev,.sr-only{
+  color: yellow !important;
+
+
+}
+/* footer */
+.bg-footer{
+  background-color: black;
+  color:white
 }
