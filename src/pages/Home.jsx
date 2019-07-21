@@ -10,10 +10,7 @@ class Home extends Component {
      {
         return (
             <div className=''>
-                <div className=''>
-                    <Jumbo/>
-                </div>
-                <div className='container mt-3 mb-0'>
+                <div className='kontainer mt-5  mb-0'>
                     <div className className='row'>
                         <div className='col-md-6 p-5 bg-primary text-white' style={{height:'300px'}}>
                             <h1>ini judul</h1>
@@ -23,7 +20,7 @@ class Home extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="container mt-5">
+                <div className="kontainer ">
                     <div className="row ">
                         <div className=" text-dark col-md-2 col-6 p-1" >
                             <div className="card bg-light" style={{height:'300px'}}>
@@ -57,6 +54,9 @@ class Home extends Component {
                             </div>
                         </div>
                     </div>
+                </div>
+                <div className='mr-3'>
+                    <Jumbo/>
                 </div>
                 <div className=''>
                     <Footer/>

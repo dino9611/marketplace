@@ -6,6 +6,9 @@ class Iklan extends Component {
     state = {  }
     render() {
         const settings = {
+            className:'center',
+            centerPadding: "60px",
+            // centerMode:true,
             dots: true,
             infinite: true,
             speed: 500,

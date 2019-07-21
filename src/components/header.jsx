@@ -26,10 +26,13 @@ class Header extends React.Component {
       isOpen: !this.state.isOpen
     });
   }
+  componentDidMount(){
+    
+  }
   render() {
     return (
-      <div className='bg-dark navbar-posisi' >
-        <Navbar color="" light expand="md" className='container '>
+      <div className='bg-white navbar-posisi' onScroll={this.bgnav}>
+        <Navbar color="" light expand="md" className='kontainer px-0'>
           <NavbarBrand className='text-primary font-weight-bolder' href="/">MaaSupp</NavbarBrand>
           <NavbarToggler onClick={this.toggle} className='' />
           <Collapse isOpen={this.state.isOpen} navbar>

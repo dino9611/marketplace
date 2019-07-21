@@ -70,7 +70,11 @@
   top: 0;
   left:0;
   right: 0;
-  z-index: 99;
+  z-index: 100;
+}
+.kontainer{
+  margin-left: 7%;
+  margin-right: 7%;
 }
 body{
 /* background-color: yellow !important  */
@@ -86,6 +90,21 @@ body{
 }
 /* footer */
 .bg-footer{
-  background-color: black;
-  color:white
+  background-color: lightgrey;
+  color:rgb(95, 94, 94)
+}
+.navbar-toggler{
+  background-color: #428bca!important;
+}
+.navbar-toggler:focus{
+  outline: none !important;
+}
+.navbar-light .navbar-toggler-icon{
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E")!important;
+}
+.heading-dalam{
+  font-size: 14px;
+}
+.mg-bawah{
+  padding-bottom: 8%;
 }
