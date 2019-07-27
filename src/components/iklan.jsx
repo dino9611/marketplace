@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
+import Fade from 'react-reveal/Fade'
 class Iklan extends Component {
     state = {  }
     render() {
@@ -18,7 +19,7 @@ class Iklan extends Component {
           };
           return (
               <Slider {...settings}>
-                <div style={{width:'100%',height:'300px'}}>
+                <div style={{width:'100%',height:'300px'}} >
                     <img src="https://artikel.pricearea.com/wp-content/uploads/2016/05/syrup-marjan-murah.jpg" alt="1" width='100%' height='300px' />
                 </div>
                 <div style={{width:'100%',height:'300px'}}>
