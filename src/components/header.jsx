@@ -11,8 +11,9 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem } from 'reactstrap';
+import {Link} from 'react-router-dom'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faShoppingCart,faSearch} from '@fortawesome/free-solid-svg-icons'
+import {faShoppingCart,faSearch,faBell} from '@fortawesome/free-solid-svg-icons'
 class Header extends React.Component {
   constructor(props) {
     super(props);
@@ -43,10 +44,19 @@ class Header extends React.Component {
     return (
       <div className='bg-white navbar-posisi' onScroll={this.bgnav}>
         <Navbar color="" light expand="xl" className='kontainer px-0'>
-              <div className='rounded text-primary position-absolute header-cart'>
-                <FontAwesomeIcon icon={faShoppingCart} className='text-center'></FontAwesomeIcon>
-                <span className='badge text-white '>0</span>
-              </div>
+          <Link to='/'><NavbarBrand className='text-primary font-weight-bolder'>MaSupp</NavbarBrand> </Link>
+              <Link to='/cart'>
+                <div className='rounded text-primary position-absolute header-cart'>
+                  <FontAwesomeIcon icon={faShoppingCart} className='text-center'></FontAwesomeIcon>
+                  <span className='badge text-white '>0</span>
+                </div>
+              </Link>
+              <Link to='/notif'>
+                <div className='rounded text-primary position-absolute header-bell'>
+                  <FontAwesomeIcon icon={faBell} className='text-center'></FontAwesomeIcon>
+                  <span className='badge text-white '>0</span>
+                </div>
+              </Link>
               <div className=' header-search position-absolute p-0 d-flex'>
                 <div className='icon-search'>
                   <FontAwesomeIcon icon={faSearch} className=''></FontAwesomeIcon>
@@ -81,12 +91,11 @@ class Header extends React.Component {
              </ul>
             </div>
           </Collapse>
-          <NavbarBrand className='text-primary font-weight-bolder' href="/">MaaSupp</NavbarBrand>
           <NavbarToggler onClick={this.toggle} className='' />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <NavLink href="/components/">Transaksi</NavLink>
+                 <Link to='/history'><NavLink>Transaksi</NavLink> </Link>
               </NavItem>
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret>

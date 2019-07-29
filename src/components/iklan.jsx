@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
-import Fade from 'react-reveal/Fade'
+// import Fade from 'react-reveal/Fade'
 class Iklan extends Component {
     state = {  }
     render() {

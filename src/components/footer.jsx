@@ -13,7 +13,7 @@ class Footer extends React.Component {
                     <div className="kontainer">
                         <div className="row">
                             <div className="col-md-4 col-12 mb-3">
-                                <h5 className='text-primary font-weight-bolder mb-3'>MaaSupp</h5>
+                                <h5 className='text-primary font-weight-bolder mb-3'>MaSupp</h5>
                                 <FontAwesomeIcon icon={faInstagram} style={{fontSize:'30px'}} className='mr-3'/>
                                 <FontAwesomeIcon icon={faFacebookF} style={{fontSize:'30px'}} className='mr-3' />
                                 <FontAwesomeIcon icon={faYoutube} style={{fontSize:'30px'}} className='mr-3' />

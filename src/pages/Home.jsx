@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Carousels from './../components/carousels'
+// import Carousels from './../components/carousels'
 import Jumbo from './../components/jumbotron'
 import Iklan from './../components/iklan'
-import Slider from 'react-slick'
+// import Slider from 'react-slick'
 import Footer from '../components/footer';
 import Fade from 'react-reveal/Fade'
 class Home extends Component {
@@ -13,7 +13,7 @@ class Home extends Component {
             <div className=''>
                 <Fade top>
                     <div className='kontainer home mb-0'>
-                        <div className className='row'>
+                        <div className='row'>
                             <div className='col-md-6 order-md-1 order-2 p-5 bg-primary text-white' style={{height:'300px'}}>
                                 <h1>ini judul</h1>
                             </div>
