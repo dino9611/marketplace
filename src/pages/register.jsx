@@ -1,6 +1,9 @@
 import React from 'react';
 import {Link} from 'react-router-dom'
 import Loader from 'react-loader-spinner'
+import {InputGroup, InputGroupAddon,Input} from 'reactstrap'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faLock,faUser,faEnvelope,faCheckSquare} from '@fortawesome/free-solid-svg-icons'
 class Register extends React.Component {
     state = {
         error:'',
@@ -15,17 +18,29 @@ class Register extends React.Component {
                         <div className=' px-5 py-5 login' square={false}>
                             
                                 <h1>Register</h1>
+                            <InputGroup className='mt-3'>
+                                <InputGroupAddon><FontAwesomeIcon icon={faEnvelope} className='mr-2 mt-2 text-primary'/></InputGroupAddon>
+                                <Input type='text' placeholder='email/@'/>
+                            </InputGroup>
+                            <InputGroup className='mt-3'>
+                                <InputGroupAddon><FontAwesomeIcon icon={faUser} className='mr-2 mt-2 text-primary'/></InputGroupAddon>
+                                <Input type='text' placeholder='username'/>
+                            </InputGroup>
+                            <InputGroup className='mt-3 mb-3'>
+                                <InputGroupAddon><FontAwesomeIcon icon={faLock} className='mr-2 mt-2 text-primary'/></InputGroupAddon>
+                                <Input type='password' placeholder='password'/>
+                            </InputGroup>
+                            <InputGroup className='mt-3 mb-3'>
+                                <InputGroupAddon><FontAwesomeIcon icon={faCheckSquare} className='mr-2 mt-2 text-primary'/></InputGroupAddon>
+                                <Input type='password' placeholder='confirm password'/>
+                            </InputGroup>
                             
-                            <input type="text" ref='email' className=' mt-3 input-data  pl-1' placeholder='Email ex:example@'/>
-                            <input type="text" ref='username' className=' mt-3 input-data  pl-1' placeholder='UserName'/>
-                            <input type='password' ref='password' className=' mt-3 input-data  pl-1' placeholder='Password'/>
-                            <input type="password" onChange={this.onRegisterchange} ref='confirm' className=' mt-3 input-data  pl-1 mb-3' placeholder='Confirm Password'/>
                             {
                                 this.state.error===''?null:
                                 <div className='alert alert-danger'>{this.state.error} <span onClick={()=>this.setState({error:''})} style={{fontWeight:'bolder',cursor:'pointer',float:'right'}}>x</span> </div>
                             }
                             {
-                                this.state.loading===false?<input type='button' onClick={this.onBtnRegisterclick} className=' btn btn-primary rounded-pill' value='Register'/>:
+                                this.state.loading===false?<input type='button' onClick={this.onBtnRegisterclick} className=' btn btn-primary rounded-pill ml-4' value='Register'/>:
                                 <Loader type="ThreeDots" color="#428bca" />
                             }
                         </div>

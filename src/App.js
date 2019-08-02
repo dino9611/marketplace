@@ -11,6 +11,7 @@ import ManageAdmin from './pages/admin/manageadmin'
 import Register from './pages/register'
 import Seacrh from './pages/search'
 import Notif from './pages/user/Notif'
+import Detailprod from './pages/detailproduct'
 import {Route} from 'react-router-dom'
 
 class App extends React.Component {
@@ -28,6 +29,7 @@ class App extends React.Component {
         <Route path='/jualanku' component={Managepenjual}/>
         <Route path='/manageadmin' component={ManageAdmin}/>
         <Route path='/notif' component={Notif}/>
+        <Route path='/detailprod' component={Detailprod}/>
 
     </div>  
     )

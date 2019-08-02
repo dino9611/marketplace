@@ -43,8 +43,8 @@ class Header extends React.Component {
   render() {
     return (
       <div className='bg-white navbar-posisi' onScroll={this.bgnav}>
-        <Navbar color="" light expand="xl" className='kontainer px-0'>
-          <Link to='/'><NavbarBrand className='text-primary font-weight-bolder'>MaSupp</NavbarBrand> </Link>
+        <Navbar color="" light expand="xl" className='kontainer px-0' >
+          <Link to='/'><NavbarBrand className='text-primary font-weight-bolder ml-2'>MaSupp</NavbarBrand> </Link>
               <Link to='/cart'>
                 <div className='rounded text-primary position-absolute header-cart'>
                   <FontAwesomeIcon icon={faShoppingCart} className='text-center'></FontAwesomeIcon>
@@ -57,15 +57,17 @@ class Header extends React.Component {
                   <span className='badge text-white '>0</span>
                 </div>
               </Link>
-              <div className=' header-search position-absolute p-0 d-flex'>
-                <div className='icon-search'>
-                  <FontAwesomeIcon icon={faSearch} className=''></FontAwesomeIcon>
+              <div className='res-search bg-white'>
+                <div className=' header-search position-absolute p-0 d-flex'>
+                  <div className='icon-search'>
+                    <FontAwesomeIcon icon={faSearch} className=''></FontAwesomeIcon>
+                  </div>
+                  <input type='text' placeholder='Search...' className='text-primary' onChange={this.onSearchChange} ref='search' />
+                  <button className='btn btn-primary'><nbsp/>Search</button>
                 </div>
-                <input type='text' placeholder='Search...' className='text-primary' onChange={this.onSearchChange} ref='search' />
-                <button className='btn btn-primary'><nbsp/>Search</button>
               </div>
-          <Collapse className='position-absolute header-search search-open' isOpen={this.state.search}  >
-           <div className='bg-white pl-1 '>
+          <Collapse className='position-absolute header-search search-open' isOpen={this.state.search} scrolling  >
+           <div className='bg-white pl-1 overflow-auto ' style={{height:'200px'}}>
              <ul>
                 <li>sdadasdas</li>
                 <li>sdadasdas</li>
@@ -91,8 +93,8 @@ class Header extends React.Component {
              </ul>
             </div>
           </Collapse>
-          <NavbarToggler onClick={this.toggle} className='' />
-          <Collapse isOpen={this.state.isOpen} navbar>
+          <NavbarToggler onClick={this.toggle} className='ml-2' />
+          <Collapse isOpen={this.state.isOpen} navbar className='mg-collapse'>
             <Nav className="ml-auto" navbar>
               <NavItem>
                  <Link to='/history'><NavLink>Transaksi</NavLink> </Link>
@@ -115,8 +117,9 @@ class Header extends React.Component {
                 </DropdownMenu>
               </UncontrolledDropdown>
             </Nav>
+            
           </Collapse>
-          
+
         </Navbar>
       </div>
     );

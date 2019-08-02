@@ -10,7 +10,7 @@ class Footer extends React.Component {
         return (
             <div className='bg-footer pt-5 mg-bawah '>
                 <Fade top>
-                    <div className="kontainer">
+                    <div className=" res-kon">
                         <div className="row">
                             <div className="col-md-4 col-12 mb-3">
                                 <h5 className='text-primary font-weight-bolder mb-3'>MaSupp</h5>

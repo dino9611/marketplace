@@ -1,4 +1,5 @@
 import React,  { Component } from 'react';
+import Loading from './../../components/loading'
 
 
 class Notif extends Component {
@@ -7,6 +8,7 @@ class Notif extends Component {
         return (
             <div className='mt-5'>
                 <h1>ini Notif</h1>
+                <Loading/>
             </div>
          );
     }
