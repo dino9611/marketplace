@@ -14,6 +14,7 @@ import {
 import {Link} from 'react-router-dom'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faShoppingCart,faSearch,faBell} from '@fortawesome/free-solid-svg-icons'
+
 class Header extends React.Component {
   constructor(props) {
     super(props);
@@ -21,7 +22,8 @@ class Header extends React.Component {
     this.toggle = this.toggle.bind(this);
     this.state = {
       isOpen: false,
-      search: false
+      search: false,
+      isTop:true,
     };
   }
   toggle() {
@@ -30,9 +32,7 @@ class Header extends React.Component {
 
     });
   }
-  componentDidMount(){
-    
-  }
+
   onSearchChange=()=>{
     if(this.refs.search.value===''){
       this.setState({search:false})
@@ -42,7 +42,7 @@ class Header extends React.Component {
   }
   render() {
     return (
-      <div className='bg-white navbar-posisi' onScroll={this.bgnav}>
+      <div className={this.state.isTop?'bg-white navbar-posisi':'bg-dark navbar-posisi'} onScroll={this.bgnav}>
         <Navbar color="" light expand="xl" className='kontainer px-0' >
           <Link to='/'><NavbarBrand className='text-primary font-weight-bolder ml-2'>MaSupp</NavbarBrand> </Link>
               <Link to='/cart'>
@@ -62,7 +62,7 @@ class Header extends React.Component {
                   <div className='icon-search'>
                     <FontAwesomeIcon icon={faSearch} className=''></FontAwesomeIcon>
                   </div>
-                  <input type='text' placeholder='Search...' className='text-primary' onChange={this.onSearchChange} ref='search' />
+                  <input type='search' placeholder='Search...' className='text-primary' onChange={this.onSearchChange} ref='search' />
                   <button className='btn btn-primary'><nbsp/>Search</button>
                 </div>
               </div>

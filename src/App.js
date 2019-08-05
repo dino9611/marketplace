@@ -15,7 +15,9 @@ import Detailprod from './pages/detailproduct'
 import {Route} from 'react-router-dom'
 
 class App extends React.Component {
-  state = {  }
+  state = {
+      isTop:true,
+    }
   render() { 
     return (
     <div >

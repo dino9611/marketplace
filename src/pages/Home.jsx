@@ -6,14 +6,26 @@ import {Link} from 'react-router-dom'
 // import Slider from 'react-slick'
 import Footer from '../components/footer';
 import Fade from 'react-reveal/Fade'
+// import Header from './../components/header'
 class Home extends Component {
-    state = {  }
-    render()
-     {
+    state = {
+        isTop:true,
+      }
+    componentDidMount(){
+        document.addEventListener('scroll', () => {
+            const isTop = window.scrollY < 470;
+            if (isTop !== this.state.isTop) {
+                this.setState({ isTop })
+            }
+        });
+    }
+    render(){
         return (
             <div className=''>
+                {/* <Header top={this.state.isTop} /> */}
                 <Fade >
                     <div className='kontainer home mb-0'>
+                    
                         <div className='row'>
                             <div className='col-md-6 order-md-1 order-2 p-5 bg-primary text-white' style={{height:'300px'}}>
                                 <h1>ini judul</h1>

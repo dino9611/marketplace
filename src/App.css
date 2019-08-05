@@ -72,6 +72,7 @@
   top: 0;
   left:0;
   right: 0;
+  transition: 200ms;
   z-index: 100;
 }
 .kontainer{
@@ -221,10 +222,10 @@ background-color: yellow !important
 }
 /* login--register */
 .login{
-  background-color: whitesmoke;
+  /* background-color: whitesmoke; */
   width: 100%;
-  border: transparent;
-  box-shadow: #08080853 4px 4px
+  border: #428bca 1.5px solid;
+  /* box-shadow: #08080853 4px 4px */
 }
 .input-data{
   background-color: transparent;
