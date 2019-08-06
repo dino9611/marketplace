@@ -3,11 +3,25 @@ import Footer from './../components/footer'
 import {Nav,TabContent,TabPane,NavItem,NavLink} from 'reactstrap'
 import classnames from 'classnames'
 import Fade from 'react-reveal/Fade'
+import {connect} from 'react-redux'
+import {ChangeHeader} from './../redux/actions'
 
 class DetailProd extends React.Component {
     state = {
         activeTab: '1',
       }
+    componentDidMount(){
+        this.props.ChangeHeader(false)
+        document.removeEventListener('scroll', () => {
+            var isTop = window.scrollY < 730;
+            if (isTop !== this.props.changeHead) {
+                this.props.ChangeHeader(isTop)
+                console.log(this.props.changeHead)
+            }
+        });
+       
+        console.log(this.props.changeHead)
+    }
     toggle=(tab)=>{
         if (this.state.activeTab !== tab) {
             this.setState({
@@ -15,7 +29,8 @@ class DetailProd extends React.Component {
             })
         }   
     }
-    render() { 
+    render() {
+        this.props.ChangeHeader(false) 
         return (
             <div>
                 <Fade>
@@ -119,5 +134,9 @@ class DetailProd extends React.Component {
           );
     }
 }
- 
-export default DetailProd;
+const MapStateToProps=(state)=>{
+    return{
+        changeHead:state.HeaderBg
+    }
+  } 
+export default connect(MapStateToProps,{ChangeHeader}) (DetailProd);

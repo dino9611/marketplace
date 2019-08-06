@@ -1,9 +1,22 @@
 import React from 'react';
-
+import {connect} from 'react-redux'
+import {ChangeHeader} from './../../redux/actions'
 
 class History extends React.Component {
     state = {  }
-    render() { 
+    componentDidMount(){
+        
+        this.props.ChangeHeader(false) 
+        document.removeEventListener('scroll', () => {
+            var isTop = window.scrollY < 730;
+            if (isTop !== this.props.changeHead) {
+                this.props.ChangeHeader(isTop)
+                console.log(this.props.changeHead)
+            }
+        });
+    }
+    render() {
+        this.props.ChangeHeader(false) 
         return (
             <div className='mt-5'>
                 <h1>ini history</h1>
@@ -12,4 +25,4 @@ class History extends React.Component {
     }
 }
  
-export default History;
+export default connect(null,{ChangeHeader}) (History);

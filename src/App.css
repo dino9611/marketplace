@@ -89,10 +89,16 @@
   border: #428bca solid 2px;
   border-right: transparent
 }
+.header-search-top{
+  border: white solid 1px;
+}
 .header-search input{
   width: 78% !important;
   border: transparent;
   margin: 1px;
+}
+.header-search input ::placeholder{
+  color: white
 }
 .header-search input :focus{
   outline: none !important;
@@ -142,27 +148,27 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: whitesmoke; 
+  background: transparent; 
 }
  
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background:#428bca; 
+  background:lightgray; 
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #3572a7; 
+  background: rgb(187, 187, 187); 
 }
-::-webkit-scrollbar-button:single-button{
-  background: whitesmoke;
+/* ::-webkit-scrollbar-button:single-button{
+  background: white;
   display: block;
   border-style: solid;
   height: 13px;
   width: 16px;
   
-}
-::-webkit-scrollbar-button:single-button:vertical:decrement {
+} */
+/* ::-webkit-scrollbar-button:single-button:vertical:decrement {
   border-width: 0 8px 8px 8px;
   border-color: transparent transparent #428bca transparent;
   
@@ -176,11 +182,15 @@
 }
 ::-webkit-scrollbar-button:single-button:vertical:increment:hover {
   border-width: 8px 8px 0 8px;
-  border-color: #1f4465 transparent transparent transparent;
-}
+  border-color: #1f4465 transparent transparent transparent; */
+/* } */
 ::placeholder{
   color:#428bca;
 }
+.change::-webkit-input-placeholder{
+  color: white !important;
+}
+
 /* body{
 background-color: yellow !important 
 
@@ -206,7 +216,8 @@ background-color: yellow !important
   color:rgb(95, 94, 94)
 }
 .navbar-toggler{
-  background-color: #428bca!important;
+  background-color: transparent!important;
+  border: transparent
 }
 .navbar-toggler:focus{
   outline: none !important;

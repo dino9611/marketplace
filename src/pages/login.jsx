@@ -5,11 +5,24 @@ import {InputGroup, InputGroupAddon,Input} from 'reactstrap'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faLock,faUser} from '@fortawesome/free-solid-svg-icons'
 import Axios from 'axios'
+import {connect} from 'react-redux'
+import {ChangeHeader} from './../redux/actions'
 class Login extends React.Component {
     state = {
         error:'',
         loading:false,
       }
+    componentDidMount(){
+        this.props.ChangeHeader(false)
+        console.log(this.props.changeHead)
+        document.addEventListener('scroll', () => {
+            var isTop = window.scrollY < 730;
+            if (isTop !== this.props.changeHead) {
+                this.props.ChangeHeader(isTop)
+                // console.log(isTop)
+            }
+        });
+    }
       onBtnLoginclick=()=>{
         var username=this.refs.username.refs.username.value
         var password=this.refs.pass.refs.pass.value
@@ -77,4 +90,4 @@ class Login extends React.Component {
     }
 }
  
-export default Login;
+export default connect(null,{ChangeHeader}) (Login);

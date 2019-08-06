@@ -5,11 +5,24 @@ import {InputGroup, InputGroupAddon,Input} from 'reactstrap'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faLock,faUser,faEnvelope,faCheckSquare} from '@fortawesome/free-solid-svg-icons'
 import Axios from 'axios'
+import {connect} from 'react-redux'
+import {ChangeHeader} from './../redux/actions'
 class Register extends React.Component {
     state = {
         error:'',
         loading:false,
       }
+    componentDidMount(){
+        this.props.ChangeHeader(false)
+        console.log(this.props.changeHead)
+        document.addEventListener('scroll', () => {
+            var isTop = window.scrollY < 730;
+            if (isTop !== this.props.changeHead) {
+                this.props.ChangeHeader(isTop)
+                // console.log(isTop)
+            }
+        });
+    }  
       onRegisterchange=()=>{
         var password=this.refs.pass.refs.pass.value
         var confirm=this.refs.confirm.refs.confirm.value
@@ -107,4 +120,4 @@ class Register extends React.Component {
     }
 }
  
-export default Register;
+export default connect(null,{ChangeHeader}) (Register);

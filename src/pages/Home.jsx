@@ -6,25 +6,34 @@ import {Link} from 'react-router-dom'
 // import Slider from 'react-slick'
 import Footer from '../components/footer';
 import Fade from 'react-reveal/Fade'
+import {connect} from 'react-redux'
+import {ChangeHeader} from './../redux/actions'
 // import Header from './../components/header'
 class Home extends Component {
     state = {
-        isTop:true,
+        
       }
     componentDidMount(){
+        this.props.ChangeHeader(true)
+        console.log(this.props.changeHead)
         document.addEventListener('scroll', () => {
-            const isTop = window.scrollY < 470;
-            if (isTop !== this.state.isTop) {
-                this.setState({ isTop })
+            var isTop = window.scrollY < 730;
+            if (isTop !== this.props.changeHead) {
+                this.props.ChangeHeader(isTop)
+                // console.log(isTop)
             }
         });
     }
+
     render(){
         return (
             <div className=''>
                 {/* <Header top={this.state.isTop} /> */}
                 <Fade >
-                    <div className='kontainer home mb-0'>
+                    <div className='' >
+                        <img src="https://static01.nyt.com/images/2017/09/25/dining/bonebrothchickenstock/bonebrothchickenstock-articleLarge.jpg" alt="" width='100%' height='740px'/>
+                    </div>
+                    <div className='kontainer mt-2 mb-0'>
                     
                         <div className='row'>
                             <div className='col-md-6 order-md-1 order-2 p-5 bg-primary text-white' style={{height:'300px'}}>
@@ -84,5 +93,9 @@ class Home extends Component {
           )
     }
 }
- 
-export default Home;
+const MapStateToProps=(state)=>{
+    return{
+        changeHead:state.HeaderBg
+    }
+}
+export default connect(MapStateToProps,{ChangeHeader})(Home);
