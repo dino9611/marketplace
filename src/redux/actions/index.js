@@ -5,3 +5,9 @@ export const ChangeHeader =(bole)=>{
         payload:bole
     }
 }
+export const RegLogSucces =(bole)=>{
+    return{
+        type:'REG_LOG_SUCCESS',
+        payload:bole
+    }
+}

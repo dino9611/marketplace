@@ -6,7 +6,8 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faLock,faUser} from '@fortawesome/free-solid-svg-icons'
 import Axios from 'axios'
 import {connect} from 'react-redux'
-import {ChangeHeader} from './../redux/actions'
+import {ChangeHeader,RegLogSucces} from './../redux/actions'
+import { ApiURL } from '../supports/apiurl';
 class Login extends React.Component {
     state = {
         error:'',
@@ -14,7 +15,6 @@ class Login extends React.Component {
       }
     componentDidMount(){
         this.props.ChangeHeader(false)
-        console.log(this.props.changeHead)
         document.addEventListener('scroll', () => {
             var isTop = window.scrollY < 730;
             if (isTop !== this.props.changeHead) {
@@ -30,7 +30,7 @@ class Login extends React.Component {
         if(username===''||password===''){
             this.setState({error:'there are something missing in form'})
         }else{
-            Axios.get('http://localhost:2001/cekuser?username='+username)
+            Axios.get(ApiURL+'/cekuser?username='+username)
             .then((res)=>{
                 if(res.data.length===0){
                     this.setState({error:'Username/Email invalid'})
@@ -39,6 +39,8 @@ class Login extends React.Component {
                         this.setState({error:'Your Password is wrong'})
                     }else if(res.data[0].password===password&&(res.data[0].username===username||res.data[0].email===username)){
                         this.setState({loading:true})
+                        localStorage.setItem('terserah',res.data[0].username)
+                        this.props.RegLogSucces(res.data[0])
                     }  
                 }
             })
@@ -48,7 +50,7 @@ class Login extends React.Component {
         }
     }
     render() {
-        if(this.state.loading===true){
+        if(this.props.LogReg.username!==''){
             return (<Redirect to='/'></Redirect>)
         }
         return (
@@ -89,5 +91,9 @@ class Login extends React.Component {
           );
     }
 }
- 
-export default connect(null,{ChangeHeader}) (Login);
+const MapStateToProps=(state)=>{
+    return{
+        LogReg:state.LogReg
+    }
+  }  
+export default connect(MapStateToProps,{ChangeHeader,RegLogSucces}) (Login);

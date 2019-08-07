@@ -13,7 +13,7 @@ import {
   DropdownItem } from 'reactstrap';
 import {Link} from 'react-router-dom'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faShoppingCart,faSearch,faBell} from '@fortawesome/free-solid-svg-icons'
+import {faShoppingCart,faSearch,faBell,faStore} from '@fortawesome/free-solid-svg-icons'
 import {connect} from 'react-redux'
 import {ChangeHeader} from './../redux/actions'
 
@@ -27,6 +27,9 @@ class Header extends React.Component {
       search: false,
       isTop:true,
     };
+  }
+  componentDidMount(){
+    console.log(this.props.LogReg)
   }
   toggle() {
     this.setState({
@@ -59,6 +62,25 @@ class Header extends React.Component {
                   <span className={this.props.changeHead?'badge text-primary':'badge text-light '}>0</span>
                 </div>
               </Link>
+              {this.props.LogReg.penjualid!==null&&this.props.LogReg.username!==''?
+                    <Link to={'/managepenjual'}>
+                    <div className={this.props.changeHead?'text-light rounded position-absolute header-icon-store':'rounded text-primary position-absolute header-icon-store'}>
+                      <FontAwesomeIcon icon={faStore}></FontAwesomeIcon>
+                    </div>
+                  </Link>
+
+                  :
+                    <Link to={'/jualreg/'+this.props.LogReg.id}>
+                    <div className={this.props.changeHead?'text-light rounded position-absolute header-store':'rounded text-primary position-absolute header-store'}>
+                      <button className={this.props.changeHead?'btn btn-store border-white p-2 text-white':'btn btn-primary p-2'} style={{fontSize:'12px'}}>Create Store</button>
+                    </div>
+                  </Link>
+              }
+              {/* <Link to={'/jualreg/'+this.props.LogReg.id}>
+                <div className={this.props.changeHead?'text-light rounded position-absolute header-store':'rounded text-primary position-absolute header-store'}>
+                  <button className={this.props.changeHead?'btn btn-store border-white p-2 text-white':'btn btn-primary p-2'} style={{fontSize:'12px'}}>Create Store</button>
+                </div>
+              </Link> */}
               <div className='res-search bg-white'>
                 <div className={this.props.changeHead?'header-search-top header-search position-absolute p-0 d-flex':' header-search position-absolute p-0 d-flex'}>
                   <div className={this.props.changeHead?'icon-search text-light' :'icon-search text-primary'}>
@@ -113,7 +135,7 @@ class Header extends React.Component {
                     Option 2
                   </DropdownItem>
                   <DropdownItem divider />
-                  <DropdownItem>
+                  <DropdownItem onClick={()=>localStorage.removeItem('terserah')}>
                     logout
                   </DropdownItem>
                 </DropdownMenu>
@@ -129,7 +151,8 @@ class Header extends React.Component {
 }
 const MapStateToProps=(state)=>{
   return{
-      changeHead:state.HeaderBg
+      changeHead:state.HeaderBg,
+      LogReg:state.LogReg
   }
 }
 export default connect(MapStateToProps,{ChangeHeader}) (Header);

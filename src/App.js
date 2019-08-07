@@ -13,12 +13,30 @@ import Seacrh from './pages/search'
 import Notif from './pages/user/Notif'
 import Detailprod from './pages/detailproduct'
 import DetailToko from './pages/detailtoko'
+import JualReg from './pages/penjual/jualregister'
 import {Route} from 'react-router-dom'
+import {ApiURL} from './supports/apiurl'
+import {connect} from 'react-redux'
+import {ChangeHeader,RegLogSucces} from './redux/actions'
+import Axios from 'axios'
 
 class App extends React.Component {
   state = {
-      isTop:true,
+
     }
+  componentDidMount(){
+    var username=localStorage.getItem('terserah')
+    if(username!==null){
+      Axios.get(ApiURL+'/users?username='+username)
+      .then((res)=>{
+          console.log(res.data)
+          this.props.RegLogSucces(res.data[0])
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
+  }
+  }
   render() { 
     return (
     <div >
@@ -34,13 +52,18 @@ class App extends React.Component {
         <Route path='/notif' component={Notif}/>
         <Route path='/detailprod' component={Detailprod}/>
         <Route path='/detailtoko' component={DetailToko}/>
+        <Route path='/jualreg' component={JualReg}/>
     </div>  
     )
     ;
   }
 }
- 
-export default App;
+const MapStateToProps=(state)=>{
+  return{
+      LogReg:state.LogReg
+  }
+}  
+export default connect(MapStateToProps,{ChangeHeader,RegLogSucces})(App);
 
 
 
