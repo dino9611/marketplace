@@ -30,7 +30,7 @@ class Login extends React.Component {
         if(username===''||password===''){
             this.setState({error:'there are something missing in form'})
         }else{
-            Axios.get(ApiURL+'/cekuser?username='+username)
+            Axios.get(ApiURL+'/users/cekuser?username='+username)
             .then((res)=>{
                 if(res.data.length===0){
                     this.setState({error:'Username/Email invalid'})
@@ -40,6 +40,7 @@ class Login extends React.Component {
                     }else if(res.data[0].password===password&&(res.data[0].username===username||res.data[0].email===username)){
                         this.setState({loading:true})
                         localStorage.setItem('terserah',res.data[0].username)
+                        localStorage.setItem('login','login')
                         this.props.RegLogSucces(res.data[0])
                     }  
                 }

@@ -11,3 +11,8 @@ export const RegLogSucces =(bole)=>{
         payload:bole
     }
 }
+export const LogOutSuccess=()=>{
+    return{
+        type:'LOGOUT_SUCCESS'
+    }
+}

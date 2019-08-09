@@ -2,7 +2,7 @@
   outline: none !important;
 }
 :root{
-  --primary-color:#03a7a7;
+  --primary-color:#0275d8;
 }
 .back-primary{
   background-color: var(--primary-color);
@@ -53,7 +53,7 @@
   top:10px;
   z-index: 101;
   width: 40% !important;
-  border: #428bca solid 2px;
+  border: var(--primary-color) solid 2px;
   border-right: transparent
 }
 .header-search-top{
@@ -80,12 +80,12 @@
 }
 .search-open{
   top:52px;
-  border: #428bca solid 2px;
+  border: var(--primary-color) solid 2px;
   border-top: transparent;
   
 }
 .header-cart{
-  left: 85%;
+  left: 86%;
   /* border: solid 1px blue; */
   font-size: 27px;
   top:10px;
@@ -97,7 +97,7 @@
   right: 20%;
 }
 .header-bell{
-  left: 83%;
+  left: 83.5%;
   /* border: solid 1px blue; */
   font-size: 27px;
   top:10px;
@@ -109,24 +109,30 @@
   right: 19.5%;
 }
 .header-store{
-  left: 74%;
+  left: 76%;
   /* border: solid 1px blue; */
+  top: 10.9px
   
-  top:12px;
 }
 .header-icon-store{
   left:80%;
   font-size: 27px;
-  top:10px;
+  top: 10.9px
 }
 .btn-store:hover{
   background: white;
-  color: #428bca !important;
-  border: 1px solid #428bca !important;
+  color: var(--primary-color) !important;
+  border: 1px solid var(--primary-color) !important;
   transition: 300ms;
 }
 .btn-store:focus{
   outline: none !important
+}
+
+.btn-light:hover{
+  background: var(--primary-color) !important ;
+  color: white !important;
+  
 }
 ::-webkit-scrollbar {
   width: 15px;
@@ -156,12 +162,12 @@
 } */
 /* ::-webkit-scrollbar-button:single-button:vertical:decrement {
   border-width: 0 8px 8px 8px;
-  border-color: transparent transparent #428bca transparent;
+  border-color: transparent transparent var(--primary-color) transparent;
   
 }
 ::-webkit-scrollbar-button:single-button:vertical:increment {
   border-width: 8px 8px 0 8px;
-  border-color: #428bca transparent transparent transparent;
+  border-color: var(--primary-color) transparent transparent transparent;
 }
 ::-webkit-scrollbar-button:single-button:vertical:decrement:hover {
   border-color: transparent transparent #1f4465 transparent;
@@ -171,7 +177,7 @@
   border-color: #1f4465 transparent transparent transparent; */
 /* } */
 ::placeholder{
-  color:#428bca;
+  color:var(--primary-color);
 }
 .change::-webkit-input-placeholder{
   color: white !important;
@@ -191,6 +197,22 @@ background-color: yellow !important
 }
 .home{
   margin-top: 5%;
+}
+.home-hitam{
+  width: 100%;
+  height: 740px;
+  position: absolute;
+  z-index:2;
+  background-color: rgba(0, 0, 0, 0.7);
+  top: 0;
+  left: 0;
+  right: 0;
+}
+.home-caption{
+  width: 50%;
+  height: 300px;
+  border: solid white 2px;
+  font-size: 2em;
 }
 /* footer */
 .res-kon{
@@ -217,22 +239,27 @@ background-color: yellow !important
 .mg-bawah{
   padding-bottom: 8%;
 }
+.footer-icon:hover{
+  transition: 200ms;
+  color: var(--primary-color);
+  cursor: pointer;
+}
 /* login--register */
 .login{
   /* background-color: whitesmoke; */
   width: 100%;
-  border: #428bca 1.5px solid;
+  border: var(--primary-color) 1.5px solid;
   /* box-shadow: #08080853 4px 4px */
 }
 .input-data{
   background-color: transparent;
   width: 100%;
   height: 40px;
-  border-bottom: 0.5px solid #428bca;
+  border-bottom: 0.5px solid var(--primary-color);
   border-left: transparent;
   border-right: transparent;
   border-top: transparent;
-  color: #428bca;
+  color: var(--primary-color);
   font-weight: bolder;
 }
 .input-data:focus{
@@ -304,5 +331,8 @@ background-color: yellow !important
   .res-kon{
     margin-left: 3% !important;
     margin-right: 3% !important;
+  }
+  .btn-reglog{
+    margin-left: auto !important;
   }
 }

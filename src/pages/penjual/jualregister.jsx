@@ -28,19 +28,20 @@ class JualReg extends React.Component {
         var kategoritoko= this.refs.category.refs.category.value
         var namatoko=this.refs.toko.refs.toko.value
         var alamattoko=this.refs.alamat.refs.alamat.value
-        var id=this.props.location.pathname.split('/')[2]
+        var id=this.props.LogReg.id
         console.log(id)
-        Axios.post(ApiURL+'/Regjual/'+id,{namatoko,alamattoko,kategoritoko})
+        Axios.post(ApiURL+'/penjual/Regjual',{namatoko,alamattoko,kategoritoko,userid:id})
         .then((res)=>{
             console.log(res.data[0])
-            var penjualid=res.data[0].id
-            Axios.put(ApiURL+'/Regjual/'+id,{penjualid})
-            .then((res)=>{
-                this.props.RegLogSucces(res.data[0])
-            })
-            .catch((err)=>{
-                console.log(err)
-            })
+            this.props.RegLogSucces(res.data[0])
+            // var penjualid=res.data[0].id
+            // Axios.put(ApiURL+'/Regjual/'+id,{penjualid})
+            // .then((res)=>{
+            //     this.props.RegLogSucces(res.data[0])
+            // })
+            // .catch((err)=>{
+            //     console.log(err)
+            // })
             
         })
         .catch((err)=>{
@@ -48,7 +49,7 @@ class JualReg extends React.Component {
         })
     }
     render() {
-        if(this.props.LogReg.penjualid!==null&&this.props.LogReg.username===''){
+        if(this.props.LogReg.username===''){
             return <Redirect to='/login'></Redirect>
         }
         if(this.props.LogReg.penjualid!==null){

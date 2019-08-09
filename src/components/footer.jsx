@@ -14,10 +14,10 @@ class Footer extends React.Component {
                         <div className="row">
                             <div className="col-md-4 col-12 mb-3">
                                 <h5 className='text-primary font-weight-bolder mb-3'>MaSupp</h5>
-                                <FontAwesomeIcon icon={faInstagram} style={{fontSize:'30px'}} className='mr-3'/>
-                                <FontAwesomeIcon icon={faFacebookF} style={{fontSize:'30px'}} className='mr-3' />
-                                <FontAwesomeIcon icon={faYoutube} style={{fontSize:'30px'}} className='mr-3' />
-                                <FontAwesomeIcon icon={faTwitter} style={{fontSize:'30px'}} className='mr-3' />
+                                <FontAwesomeIcon icon={faInstagram} style={{fontSize:'30px'}} className='mr-3 footer-icon'/>
+                                <FontAwesomeIcon icon={faFacebookF} style={{fontSize:'30px'}} className='mr-3 footer-icon' />
+                                <FontAwesomeIcon icon={faYoutube} style={{fontSize:'30px'}} className='mr-3 footer-icon' />
+                                <FontAwesomeIcon icon={faTwitter} style={{fontSize:'30px'}} className='mr-3 footer-icon' />
                             </div>
                             <div className="col-md-4 col-6 mb-5 ">
                                 <div className="mb-3">

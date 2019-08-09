@@ -1,12 +1,13 @@
 import React from 'react';
-import {Link} from 'react-router-dom'
+import {Link,Redirect} from 'react-router-dom'
 import Loader from 'react-loader-spinner'
 import {InputGroup, InputGroupAddon,Input} from 'reactstrap'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faLock,faUser,faEnvelope,faCheckSquare} from '@fortawesome/free-solid-svg-icons'
 import Axios from 'axios'
 import {connect} from 'react-redux'
-import {ChangeHeader} from './../redux/actions'
+import {ChangeHeader,RegLogSucces} from './../redux/actions'
+import { ApiURL } from '../supports/apiurl';
 class Register extends React.Component {
     state = {
         error:'',
@@ -49,17 +50,19 @@ class Register extends React.Component {
             }else{
                 this.setState({loading:true})
                 //ngecek username udah ada atau belum
-                Axios.get('http://localhost:2001/cekuser?username='+username)
+                Axios.get(ApiURL+'/users/cekuser?username='+username)
                 .then((res)=>{
                     if(res.data.length>0){
                         this.setState({loading:false})
                         this.setState({error:'username has been taken'})
                     }else{
-                        Axios.post('http://localhost:2001/register',{username,password,email,roleid:3})
+                        Axios.post(ApiURL+'/users/register',{username,password,email,roleid:3})
                         .then((res)=>{
                             console.log(res.data)
                             this.setState({loading:false})
-
+                            localStorage.setItem('terserah',res.data[0].username)
+                            localStorage.setItem('login','login')
+                            this.props.RegLogSucces(res.data[0])
                         })
                         .catch((err)=>{
                             console.log(err);
@@ -73,7 +76,10 @@ class Register extends React.Component {
 
         } 
     }
-    render() { 
+    render() {
+        if(this.props.LogReg.username!==''){
+            return (<Redirect to='/'></Redirect>)
+        } 
         return (
             <div className='mt-0'>
             <div className="container">
@@ -119,5 +125,9 @@ class Register extends React.Component {
           );
     }
 }
- 
-export default connect(null,{ChangeHeader}) (Register);
+const MapStateToProps=(state)=>{
+    return{
+        LogReg:state.LogReg
+    }
+  }  
+export default connect(MapStateToProps,{ChangeHeader,RegLogSucces}) (Register);

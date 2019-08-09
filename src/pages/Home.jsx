@@ -26,12 +26,18 @@ class Home extends Component {
     }
 
     render(){
+        // if(this.props.LogReg.)
         return (
             <div className=''>
                 {/* <Header top={this.state.isTop} /> */}
                 <Fade >
                     <div className='' >
                         <img src="https://static01.nyt.com/images/2017/09/25/dining/bonebrothchickenstock/bonebrothchickenstock-articleLarge.jpg" alt="" width='100%' height='740px'/>
+                        <div className='home-hitam d-flex justify-content-center align-items-center'>
+                            <div className='home-caption d-flex justify-content-center align-items-center text-center text-white'>
+                                    Marketplace product pertanian terkece Se-Konohagakure
+                            </div>
+                        </div>
                     </div>
                     <div className='kontainer mt-2 mb-0'>
                     
@@ -95,7 +101,8 @@ class Home extends Component {
 }
 const MapStateToProps=(state)=>{
     return{
-        changeHead:state.HeaderBg
+        changeHead:state.HeaderBg,
+        LogReg:state.LogReg
     }
 }
 export default connect(MapStateToProps,{ChangeHeader})(Home);

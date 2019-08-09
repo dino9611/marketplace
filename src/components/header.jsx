@@ -13,9 +13,9 @@ import {
   DropdownItem } from 'reactstrap';
 import {Link} from 'react-router-dom'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faShoppingCart,faSearch,faBell,faStore} from '@fortawesome/free-solid-svg-icons'
+import {faShoppingCart,faSearch,faBell,faStore,faUser,faFile} from '@fortawesome/free-solid-svg-icons'
 import {connect} from 'react-redux'
-import {ChangeHeader} from './../redux/actions'
+import {ChangeHeader,LogOutSuccess} from './../redux/actions'
 
 class Header extends React.Component {
   constructor(props) {
@@ -26,10 +26,20 @@ class Header extends React.Component {
       isOpen: false,
       search: false,
       isTop:true,
+      createstore:true
     };
   }
   componentDidMount(){
     console.log(this.props.LogReg)
+
+  }
+  componentWillUpdate(){
+    // if(this.props.LogReg.penjualid!==null&&this.props.LogReg.username!==''){
+    //   this.setState({createstore:true})
+    // }else{
+    //   this.setState({createstore:false})
+    // }
+    console.log(this.state.createstore)
   }
   toggle() {
     this.setState({
@@ -45,23 +55,47 @@ class Header extends React.Component {
       this.setState({search:true})
     }
   }
+  oncreatestorechange=()=>{
+    if(this.props.LogReg.penjualid!==null&&this.props.LogReg.username!==''){
+      this.setState({createstore:true})
+    }else{
+      this.setState({createstore:false})
+    }
+    console.log(this.state.createstore)
+  }
+  onlogout=()=>{
+    localStorage.removeItem('terserah')
+    localStorage.removeItem('login')
+    this.props.LogOutSuccess()
+    console.log(this.props.LogReg)
+  }
+
   render() {
     return (
       <div className={this.props.changeHead?'bg-transparent navbar-posisi':' bg-white navbar-posisi'} onScroll={this.bgnav}>
         <Navbar color="" light expand="xl" className='kontainer px-0' >
-          <Link to='/'><NavbarBrand className={this.props.changeHead?'text-white font-weight-bolder ml-2':'text-primary font-weight-bolder ml-2'}>MaSupp</NavbarBrand> </Link>
-              <Link to='/cart'>
-                <div className={this.props.changeHead?'text-light rounded position-absolute header-cart':'rounded text-primary position-absolute header-cart'}>
-                  <FontAwesomeIcon icon={faShoppingCart} className='text-center'></FontAwesomeIcon>
-                  <span className={this.props.changeHead?'badge text-primary':'badge text-white '}>0</span>
-                </div>
-              </Link>
-              <Link to='/notif'>
-                <div className={this.props.changeHead?'text-light rounded position-absolute header-bell':'rounded text-primary position-absolute header-bell'}>
-                  <FontAwesomeIcon icon={faBell} className='text-center'></FontAwesomeIcon>
-                  <span className={this.props.changeHead?'badge text-primary':'badge text-light '}>0</span>
-                </div>
-              </Link>
+          <Link to='/' className={this.props.changeHead?'text-white font-weight-bolder ml-2':'text-primary font-weight-bolder ml-2'}><NavbarBrand >MaSupp</NavbarBrand> </Link>
+              {this.props.LogReg.username===''?
+              null
+              :
+              <div>
+
+                <Link to='/cart'>
+                  <div className={this.props.changeHead?'text-light rounded position-absolute header-cart':'rounded text-primary position-absolute header-cart'}>
+                    <FontAwesomeIcon icon={faShoppingCart} className='text-center'></FontAwesomeIcon>
+                    <span className={this.props.changeHead?'badge text-primary':'badge text-white '}>0</span>
+                  </div>
+                </Link>
+                <Link to='/notif'>
+                  <div className={this.props.changeHead?'text-light rounded position-absolute header-bell':'rounded text-primary position-absolute header-bell'}>
+                    <FontAwesomeIcon icon={faBell} className='text-center'></FontAwesomeIcon>
+                    <span className={this.props.changeHead?'badge text-primary':'badge text-light '}>0</span>
+                  </div>
+                </Link>
+              </div>
+            
+            
+              }
               {this.props.LogReg.penjualid!==null&&this.props.LogReg.username!==''?
                     <Link to={'/managepenjual'}>
                     <div className={this.props.changeHead?'text-light rounded position-absolute header-icon-store':'rounded text-primary position-absolute header-icon-store'}>
@@ -70,27 +104,23 @@ class Header extends React.Component {
                   </Link>
 
                   :
-                    <Link to={'/jualreg/'+this.props.LogReg.id}>
+                    <Link to={'/jualreg'}>
                     <div className={this.props.changeHead?'text-light rounded position-absolute header-store':'rounded text-primary position-absolute header-store'}>
-                      <button className={this.props.changeHead?'btn btn-store border-white p-2 text-white':'btn btn-primary p-2'} style={{fontSize:'12px'}}>Create Store</button>
+                      <button className={this.props.changeHead?'btn btn-store border-white mt-1  text-white':'mt-1 btn btn-primary '} style={{fontSize:'12px'}}>Create Store</button>
                     </div>
                   </Link>
               }
-              {/* <Link to={'/jualreg/'+this.props.LogReg.id}>
-                <div className={this.props.changeHead?'text-light rounded position-absolute header-store':'rounded text-primary position-absolute header-store'}>
-                  <button className={this.props.changeHead?'btn btn-store border-white p-2 text-white':'btn btn-primary p-2'} style={{fontSize:'12px'}}>Create Store</button>
-                </div>
-              </Link> */}
+              
               <div className='res-search bg-white'>
                 <div className={this.props.changeHead?'header-search-top header-search position-absolute p-0 d-flex':' header-search position-absolute p-0 d-flex'}>
                   <div className={this.props.changeHead?'icon-search text-light' :'icon-search text-primary'}>
                     <FontAwesomeIcon icon={faSearch} className=''></FontAwesomeIcon>
                   </div>
                   <input type='search' placeholder='Search...' className={this.props.changeHead?'text-white bg-transparent change':'text-primary '} onChange={this.onSearchChange} ref='search' />
-                  <button className={this.props.changeHead?'btn btn-light text-primary' :'btn btn-primary'}><nbsp/>Search</button>
+                  <button className={this.props.changeHead?'btn btn-light text-primary' :'btn btn-primary'}>Search</button>
                 </div>
               </div>
-          <Collapse className={this.props.changeHead?'header-search-top position-absolute header-search search-open':'position-absolute header-search search-open'} isOpen={this.state.search} scrolling  >
+          {/* <Collapse className={this.props.changeHead?'header-search-top position-absolute header-search search-open':'position-absolute header-search search-open'} isOpen={this.state.search} scrolling  >
            <div className={this.props.changeHead?'bg-transparent text-light pl-1 overflow-auto ':'bg-white pl-1 overflow-auto '} style={{height:'200px'}}>
              <ul>
                 <li>sdadasdas</li>
@@ -116,33 +146,55 @@ class Header extends React.Component {
                 <li>sdadasdas</li>
              </ul>
             </div>
-          </Collapse>
-          <NavbarToggler onClick={this.toggle} className={this.props.changeHead?'ml-2 ':'ml-2 bg-primary'} />
-          <Collapse isOpen={this.state.isOpen} navbar className='mg-collapse'>
-            <Nav className="ml-auto" navbar>
-              <NavItem>
-                 <Link to='/history'><NavLink className={this.props.changeHead?'text-white':'text-primary'}>Transaksi</NavLink> </Link>
-              </NavItem>
-              <UncontrolledDropdown nav inNavbar>
-                <DropdownToggle nav caret className={this.props.changeHead?'text-white':'text-primary'}>
-                  Options
-                </DropdownToggle>
-                <DropdownMenu right>
-                  <DropdownItem>
-                   <Link to='/manageadmin'>Admin</Link>
-                  </DropdownItem>
-                  <DropdownItem>
-                    Option 2
-                  </DropdownItem>
-                  <DropdownItem divider />
-                  <DropdownItem onClick={()=>localStorage.removeItem('terserah')}>
-                    logout
-                  </DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
-            </Nav>
+          </Collapse> */}
+          {this.props.LogReg.username===''?null:<NavbarToggler onClick={this.toggle} className={this.props.changeHead?'ml-2 ':'ml-2 bg-primary'} ></NavbarToggler>}
+              {this.props.LogReg.username===''?
+              <Nav className='ml-md-auto ml-1' >
+                  <NavItem>
+                    <Link to='/register'>
+                      <button className={this.props.changeHead?'mr-2 mt-1  btn btn-store border-white text-white' :'mr-2 mt-1 btn btn-primary'}style={{fontSize:'12px'}}>Join Now!</button>
+                    </Link>
+                  </NavItem>
+                  <NavItem>
+                    <Link to='login'>
+                      <button className={this.props.changeHead?'btn mt-1 btn btn-store border-white text-white' :'mt-1 btn btn-primary'} style={{fontSize:'12px'}}>Sign In</button>
+                    </Link>
+                  </NavItem>
+              </Nav>
+                :
+                
+
+
+                
+                <Collapse isOpen={this.state.isOpen} navbar className='mg-collapse'>
+                  <Nav className="ml-auto" navbar>
+                      <NavItem>
+                        <Link to='/history'><NavLink className={this.props.changeHead?'text-white ml-md-0 ml-3':'ml-md-0 text-primary ml-3'}>Transaksi</NavLink> </Link>
+                      </NavItem>
+                      <UncontrolledDropdown nav inNavbar>
+                        <DropdownToggle nav className={this.props.changeHead?'text-white ml-md-0 ml-3':'ml-md-0 text-primary ml-3'}>
+                          <FontAwesomeIcon icon={faUser}/><span className='ml-2'>{this.props.LogReg.username}</span>
+                        </DropdownToggle>
+                        <DropdownMenu right>
+                          <DropdownItem>
+                          <Link to='/manageadmin'>Admin</Link>
+                          </DropdownItem>
+                          <DropdownItem>
+                            Option 2
+                          </DropdownItem>
+                          <DropdownItem divider />
+                          <DropdownItem onClick={this.onlogout}>
+                            <Link to='/'>Logout</Link>
+                          </DropdownItem>
+                        </DropdownMenu>
+                      </UncontrolledDropdown>
+                  </Nav>
+                  </Collapse> 
+                  
+              
+              }
             
-          </Collapse>
+          
 
         </Navbar>
       </div>
@@ -155,4 +207,4 @@ const MapStateToProps=(state)=>{
       LogReg:state.LogReg
   }
 }
-export default connect(MapStateToProps,{ChangeHeader}) (Header);
+export default connect(MapStateToProps,{ChangeHeader,LogOutSuccess}) (Header);

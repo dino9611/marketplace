@@ -27,7 +27,7 @@ class App extends React.Component {
   componentDidMount(){
     var username=localStorage.getItem('terserah')
     if(username!==null){
-      Axios.get(ApiURL+'/users?username='+username)
+      Axios.get(ApiURL+'/users/semuausers?username='+username)
       .then((res)=>{
           console.log(res.data)
           this.props.RegLogSucces(res.data[0])
