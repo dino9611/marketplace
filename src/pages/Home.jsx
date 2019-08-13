@@ -32,7 +32,7 @@ class Home extends Component {
                 {/* <Header top={this.state.isTop} /> */}
                 <Fade >
                     <div className='' >
-                        <img src="https://static01.nyt.com/images/2017/09/25/dining/bonebrothchickenstock/bonebrothchickenstock-articleLarge.jpg" alt="" width='100%' height='740px'/>
+                        <img src="http://localhost:2001/product/images/home-foto.jpg" alt="gambar home" width='100%' height='740px'/>
                         <div className='home-hitam d-flex justify-content-center align-items-center'>
                             <div className='home-caption d-flex justify-content-center align-items-center text-center text-white'>
                                     Marketplace product pertanian terkece Se-Konohagakure

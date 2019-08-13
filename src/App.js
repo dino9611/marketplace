@@ -25,9 +25,11 @@ class App extends React.Component {
 
     }
   componentDidMount(){
+    console.log('dsad')
     var username=localStorage.getItem('terserah')
+    
     if(username!==null){
-      Axios.get(ApiURL+'/users/semuausers?username='+username)
+      Axios.get(ApiURL+'/users/cekuser?username='+username)
       .then((res)=>{
           console.log(res.data)
           this.props.RegLogSucces(res.data[0])
@@ -35,7 +37,7 @@ class App extends React.Component {
       .catch((err)=>{
         console.log(err)
       })
-  }
+    }
   }
   render() { 
     return (

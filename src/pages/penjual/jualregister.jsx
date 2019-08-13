@@ -6,7 +6,7 @@ import {InputGroup, InputGroupAddon,Input} from 'reactstrap'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faStore,faMapMarked,faUser,faStoreAlt} from '@fortawesome/free-solid-svg-icons'
 import Axios from 'axios'
-import {Link,Redirect} from 'react-router-dom'
+import {Redirect} from 'react-router-dom'
 import { ApiURL } from '../../supports/apiurl';
 
 class JualReg extends React.Component {
