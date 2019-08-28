@@ -56,7 +56,7 @@ class Register extends React.Component {
                         this.setState({loading:false})
                         this.setState({error:'username has been taken'})
                     }else{
-                        Axios.post(ApiURL+'/users/register',{username,password,email,roleid:3})
+                        Axios.post(ApiURL+'/users/register',{username,password,email})
                         .then((res)=>{
                             console.log(res.data)
                             this.setState({loading:false})

@@ -6,10 +6,8 @@ class Loading extends React.Component {
     render() { 
         return (
             <div style={{marginTop:'23%',marginLeft:'45%'}}>
-                <Spinner type='grow' color='primary'/>
-                <Spinner type='grow' color='primary'/>
-                <Spinner type='grow' color='primary'/>
-                <Spinner type='grow' color='primary'/>
+                <Spinner  color='primary'/>
+        
             </div>
           );
     }

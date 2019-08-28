@@ -13,9 +13,13 @@ import {
   DropdownItem } from 'reactstrap';
 import {Link} from 'react-router-dom'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faShoppingCart,faSearch,faBell,faStore,faUser,faFile} from '@fortawesome/free-solid-svg-icons'
+import {faShoppingCart,faSearch,faBell,faStore,faUser} from '@fortawesome/free-solid-svg-icons'
 import {connect} from 'react-redux'
-import {ChangeHeader,LogOutSuccess} from './../redux/actions'
+import {ChangeHeader,LogOutSuccess,RegLogSucces} from './../redux/actions'
+
+// import Axios from 'axios'
+// import { ApiURL } from '../supports/apiurl';
+
 
 class Header extends React.Component {
   constructor(props) {
@@ -30,7 +34,20 @@ class Header extends React.Component {
     };
   }
   componentDidMount(){
-    console.log(this.props.LogReg)
+   
+    // var username=localStorage.getItem('terserah')
+    
+    // if(username!==null){
+    //   Axios.get(ApiURL+'/users/cekuser?username='+username)
+    //   .then((res)=>{
+    //       console.log(res.data)
+    //       this.props.RegLogSucces(res.data[0])
+    //       console.log(this.props.LogReg)
+    //   })
+    //   .catch((err)=>{
+    //     console.log(err)
+    //   })
+    // }
 
   }
   componentWillUpdate(){
@@ -39,7 +56,7 @@ class Header extends React.Component {
     // }else{
     //   this.setState({createstore:false})
     // }
-    console.log(this.state.createstore)
+    // console.log(this.state.createstore)
   }
   toggle() {
     this.setState({
@@ -69,7 +86,7 @@ class Header extends React.Component {
     this.props.LogOutSuccess()
     console.log(this.props.LogReg)
   }
-
+  
   render() {
     return (
       <div className={this.props.changeHead?'bg-transparent navbar-posisi':' bg-white navbar-posisi'} onScroll={this.bgnav}>
@@ -80,13 +97,13 @@ class Header extends React.Component {
               :
               <div>
 
-                <Link to='/cart'>
+                <Link to={'/cart'}>
                   <div className={this.props.changeHead?'text-light rounded position-absolute header-cart':'rounded text-primary position-absolute header-cart'}>
                     <FontAwesomeIcon icon={faShoppingCart} className='text-center'></FontAwesomeIcon>
                     <span className={this.props.changeHead?'badge text-primary':'badge text-white '}>0</span>
                   </div>
                 </Link>
-                <Link to='/notif'>
+                <Link to='/jualanku'>
                   <div className={this.props.changeHead?'text-light rounded position-absolute header-bell':'rounded text-primary position-absolute header-bell'}>
                     <FontAwesomeIcon icon={faBell} className='text-center'></FontAwesomeIcon>
                     <span className={this.props.changeHead?'badge text-primary':'badge text-light '}>0</span>
@@ -97,7 +114,7 @@ class Header extends React.Component {
             
               }
               {this.props.LogReg.penjualid!==null&&this.props.LogReg.username!==''?
-                    <Link to={'/managepenjual'}>
+                    <Link to={'/manageproduct'}>
                     <div className={this.props.changeHead?'text-light rounded position-absolute header-icon-store':'rounded text-primary position-absolute header-icon-store'}>
                       <FontAwesomeIcon icon={faStore}></FontAwesomeIcon>
                     </div>
@@ -179,9 +196,21 @@ class Header extends React.Component {
                           <DropdownItem>
                           <Link to='/manageadmin'>Admin</Link>
                           </DropdownItem>
+                          {this.props.LogReg.statusver==='Unverified'?
+                        <Link to='/resendverif'>
                           <DropdownItem>
-                            Option 2
+                            <span style={{color:'red'}}> belum verified</span>
+                          </DropdownItem> 
+                        
+                        </Link>     
+                          :
+                          <DropdownItem>
+                            <span style={{color:'green'}}>verified </span> 
                           </DropdownItem>
+                        
+                        
+                        }
+                     
                           <DropdownItem divider />
                           <DropdownItem onClick={this.onlogout}>
                             <Link to='/'>Logout</Link>
@@ -207,4 +236,4 @@ const MapStateToProps=(state)=>{
       LogReg:state.LogReg
   }
 }
-export default connect(MapStateToProps,{ChangeHeader,LogOutSuccess}) (Header);
+export default connect(MapStateToProps,{ChangeHeader,LogOutSuccess,RegLogSucces}) (Header);

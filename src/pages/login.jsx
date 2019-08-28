@@ -15,6 +15,7 @@ class Login extends React.Component {
       }
     componentDidMount(){
         this.props.ChangeHeader(false)
+        console.log(this.props.changeHead)
         document.addEventListener('scroll', () => {
             var isTop = window.scrollY < 730;
             if (isTop !== this.props.changeHead) {
@@ -30,19 +31,19 @@ class Login extends React.Component {
         if(username===''||password===''){
             this.setState({error:'there are something missing in form'})
         }else{
-            Axios.get(ApiURL+'/users/cekuser?username='+username)
+            Axios.post(ApiURL+'/users/login',{
+                username,password
+            })
             .then((res)=>{
-                if(res.data.length===0){
-                    this.setState({error:'Username/Email invalid'})
-                }else{
-                    if(res.data[0].password!==password&&(res.data[0].username===username||res.data[0].email===username)){
-                        this.setState({error:'Your Password is wrong'})
-                    }else if(res.data[0].password===password&&(res.data[0].username===username||res.data[0].email===username)){
-                        this.setState({loading:true})
-                        localStorage.setItem('terserah',res.data[0].username)
-                        localStorage.setItem('login','login')
-                        this.props.RegLogSucces(res.data[0])
-                    }  
+                console.log(res.data)
+                if(res.data.status==='error'){
+                    this.setState({error:res.data.error})
+                }
+                else{
+                    this.setState({loading:true})
+                    localStorage.setItem('terserah',res.data[0].username)
+                    localStorage.setItem('login','login')
+                    this.props.RegLogSucces(res.data[0])
                 }
             })
             .catch((err)=>{
@@ -51,6 +52,14 @@ class Login extends React.Component {
         }
     }
     render() {
+        this.props.ChangeHeader(false)
+        document.addEventListener('scroll', () => {
+            var isTop = window.scrollY < 730;
+            if (isTop !== this.props.changeHead) {
+                this.props.ChangeHeader(isTop)
+                // console.log(isTop)
+            }
+        });
         if(this.props.LogReg.username!==''){
             return (<Redirect to='/'></Redirect>)
         }
@@ -94,7 +103,8 @@ class Login extends React.Component {
 }
 const MapStateToProps=(state)=>{
     return{
-        LogReg:state.LogReg
+        LogReg:state.LogReg,
+        changeHead:state.HeaderBg
     }
   }  
 export default connect(MapStateToProps,{ChangeHeader,RegLogSucces}) (Login);

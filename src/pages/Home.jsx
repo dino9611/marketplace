@@ -8,28 +8,60 @@ import Footer from '../components/footer';
 import Fade from 'react-reveal/Fade'
 import {connect} from 'react-redux'
 import {ChangeHeader} from './../redux/actions'
+import Numeral from 'numeral'
 // import Header from './../components/header'
+import Axios from 'axios'
+import { ApiURL } from '../supports/apiurl';
 class Home extends Component {
     state = {
-        
+        listallproduct:[]
       }
     componentDidMount(){
         this.props.ChangeHeader(true)
         console.log(this.props.changeHead)
+        Axios.get(`${ApiURL}/product/getallproducthome`)
+        .then((res)=>{
+            this.setState({listallproduct:res.data})
+        }).catch((err)=>{
+            console.log(err)
+        })
         document.addEventListener('scroll', () => {
             var isTop = window.scrollY < 730;
             if (isTop !== this.props.changeHead) {
                 this.props.ChangeHeader(isTop)
                 // console.log(isTop)
             }
-        });
+        })
     }
-
+    renderallproduct=()=>{
+        return this.state.listallproduct.map((item)=>{
+            return(
+                <div className=" text-dark col-md-2 col-6 p-1" >
+                    <Link to={'/detailprod/'+item.id} style={{textDecoration:'none'}}>
+                        <div className="card bg-light" style={{height:'300px',fontSize:'17px'}}>
+                            <img src={`${ApiURL+item.image}`} alt={item.id} height='150px' width='100%'/>
+                            <div className='mt-1 font-weight-bolder px-3 text-dark'>
+                                {item.nama}/{item.satuanorder}
+                            </div>
+                            <div className="row px-4  mt-5">
+                                <div className="col-4 p-1">
+                                    <div className="rounded-pill py-1 bg-primary  text-center text-white" style={{fontSize:'8px'}}>{item.namacategory}</div>
+                                </div>
+                            </div>
+                            <div className='mt-1 text-primary font-weight-bold px-3' style={{fontSize:'16px'}}>
+                                {'Rp.'+Numeral(item.harga).format('0,0.00')}    
+                            </div> 
+                        </div>
+                    </Link>
+                </div>
+            )
+        })
+    }
     render(){
-        // if(this.props.LogReg.)
+
         return (
             <div className=''>
-                {/* <Header top={this.state.isTop} /> */}
+
                 <Fade >
                     <div className='' >
                         <img src="http://localhost:2001/product/images/home-foto.jpg" alt="gambar home" width='100%' height='740px'/>
@@ -52,40 +84,7 @@ class Home extends Component {
                     </div>
                     <div className="kontainer ">
                         <div className="row ">
-                            <div className=" text-dark col-md-2 col-6 p-1" >
-                                <Link to='/detailprod'>
-                                    <div className="card bg-light" style={{height:'300px'}}>
-                                        <img src="https://www.ayobandung.com/images-bandung/post/articles/2019/02/24/45638/rice-3997767_640.jpg" alt="1" width='100%'/>
-                                        ke detail roid 
-                                    </div>
-                                </Link>
-                            </div>
-                            <div className=" text-dark col-md-2 col-6  p-1" >
-                                <div className="card bg-light" style={{height:'300px'}}>
-                                    <img src="https://www.ayobandung.com/images-bandung/post/articles/2019/02/24/45638/rice-3997767_640.jpg" alt="1" width='100%'/> 
-                                </div>
-                            </div>
-                            <div className=" text-dark col-md-2 col-6  p-1" >
-                                <div className="card bg-light" style={{height:'300px'}}>
-                                    <img src="https://www.ayobandung.com/images-bandung/post/articles/2019/02/24/45638/rice-3997767_640.jpg" alt="1" width='100%'/> 
-                                </div>
-                            </div>
-                            <div className=" text-dark col-md-2 col-6  p-1" >
-                                <div className="card bg-light" style={{height:'300px'}}>
-                                    <img src="https://www.ayobandung.com/images-bandung/post/articles/2019/02/24/45638/rice-3997767_640.jpg" alt="1" width='100%'/> 
-                                </div>
-                            </div>
-                            <div className=" text-dark col-md-2 col-6  p-1" >
-                                <div className="card bg-light" style={{height:'300px'}}>
-                                    <img src="https://www.ayobandung.com/images-bandung/post/articles/2019/02/24/45638/rice-3997767_640.jpg" alt="1" width='100%'/> 
-                                </div>
-                            </div>
-                            <div className="text-dark col-md-2 col-6  p-1" >
-                                <div className="card bg-light" style={{height:'300px'}}>
-                                    <img src="https://www.ayobandung.com/images-bandung/post/articles/2019/02/24/45638/rice-3997767_640.jpg" alt="1" width='100%'/> 
-                                    saddasd
-                                </div>
-                            </div>
+                            {this.renderallproduct()}
                         </div>
                     </div>
                     <div className='mr-3'>

@@ -14,18 +14,22 @@ import Notif from './pages/user/Notif'
 import Detailprod from './pages/detailproduct'
 import DetailToko from './pages/detailtoko'
 import JualReg from './pages/penjual/jualregister'
-import {Route} from 'react-router-dom'
+import Verified from './pages/user/verified'
+import Pagenotfound from './pages/Pagenotfound'
+import ResendVerif from './pages/user/resendverif'
+import {Route,Switch} from 'react-router-dom'
 import {ApiURL} from './supports/apiurl'
 import {connect} from 'react-redux'
 import {ChangeHeader,RegLogSucces} from './redux/actions'
 import Axios from 'axios'
+import Loading from './components/loading'
+
 
 class App extends React.Component {
   state = {
-
+      loading:true
     }
   componentDidMount(){
-    console.log('dsad')
     var username=localStorage.getItem('terserah')
     
     if(username!==null){
@@ -33,28 +37,41 @@ class App extends React.Component {
       .then((res)=>{
           console.log(res.data)
           this.props.RegLogSucces(res.data[0])
+          this.setState({loading:false})
+          console.log(this.props.LogReg)
       })
       .catch((err)=>{
         console.log(err)
       })
+    }else{
+      this.setState({loading:false})
     }
+
   }
-  render() { 
+  render() {
+    if(this.state.loading) {
+      return <Loading/>
+    }
     return (
     <div >
         <Header/>
-        <Route path='/' component={Home} exact/>
-        <Route path='/cart' component={Cart}/>
-        <Route path='/history' component={History}/>
-        <Route path='/search' component={Seacrh}/>
-        <Route path='/register' component={Register}/>
-        <Route path='/login' component={Login}/>
-        <Route path='/jualanku' component={Managepenjual}/>
-        <Route path='/manageadmin' component={ManageAdmin}/>
-        <Route path='/notif' component={Notif}/>
-        <Route path='/detailprod' component={Detailprod}/>
-        <Route path='/detailtoko' component={DetailToko}/>
-        <Route path='/jualreg' component={JualReg}/>
+        <Switch>
+          <Route path='/' component={Home} exact/>
+          <Route path='/cart' component={Cart}/>
+          <Route path='/history' component={History}/>
+          <Route path='/search' component={Seacrh}/>
+          <Route path='/register' component={Register}/>
+          <Route path='/login' component={Login}/>
+          <Route path='/manageproduct' component={Managepenjual}/>
+          <Route path='/manageadmin' component={ManageAdmin}/>
+          <Route path='/notif' component={Notif}/>
+          <Route path='/detailprod' component={Detailprod}/>
+          <Route path='/detailtoko' component={DetailToko}/>
+          <Route path='/jualreg' component={JualReg}/>
+          <Route path='/verified' component={Verified}/>
+          <Route path='/resendverif' component={ResendVerif}/>
+          <Route path='/*' component={Pagenotfound}/>
+        </Switch>
     </div>  
     )
     ;
