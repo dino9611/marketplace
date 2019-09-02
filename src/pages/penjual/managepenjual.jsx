@@ -286,15 +286,19 @@ class Jualanku extends React.Component {
                             <button className='btn btn-danger'>Cancel</button>
                         </ModalFooter>
                     </Modal>
-                    {this.state.listproduct.length===0?null:<button className='btn btn-success' onClick={()=>this.setState({Modal:true})}>Add product</button>}
                     <Modal centered isOpen={this.state.deletemodal} toggle={()=>this.setState({deletemodal:false,modaldeleteindex:-1})}>
-
                         {this.rendermodaldelete()}
                     </Modal>
                     <Modal centered isOpen={this.state.editmodal} toggle={()=>this.setState({editmodal:false,modaleditindex:-1})}>
-
                         {this.rendermodaledit()}
                     </Modal>
+                    <div className='mb-2'>
+                        <a href="http://localhost:3000/pentrans?stat=waitingproses">
+                            <button className='btn btn-primary'>Manage transaksi</button>
+                        </a>
+                    </div>
+                    {this.state.listproduct.length===0?null:<button className='btn btn-light font-weight-bolder' onClick={()=>this.setState({Modal:true})}>Add product</button>}
+
                     <Table className='mt-2' striped hover>
                         <thead>
                             <tr>
@@ -311,7 +315,7 @@ class Jualanku extends React.Component {
                             </tr>
                         </thead>
                         <tbody>
-                                {this.renderproductlist()}
+                            {this.renderproductlist()}
                         </tbody>
                     </Table>
                 </div>

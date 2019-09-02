@@ -1,6 +1,12 @@
 import React from 'react';
 // import logo from './logo.svg';
 import './App.css';
+import {Route,Switch} from 'react-router-dom'
+import {ApiURL} from './supports/apiurl'
+import {connect} from 'react-redux'
+import {ChangeHeader,RegLogSucces} from './redux/actions'
+import Axios from 'axios'
+import Loading from './components/loading'
 import Header from './components/header'
 import Home from './pages/Home'
 import Cart from './pages/user/cart'
@@ -17,12 +23,9 @@ import JualReg from './pages/penjual/jualregister'
 import Verified from './pages/user/verified'
 import Pagenotfound from './pages/Pagenotfound'
 import ResendVerif from './pages/user/resendverif'
-import {Route,Switch} from 'react-router-dom'
-import {ApiURL} from './supports/apiurl'
-import {connect} from 'react-redux'
-import {ChangeHeader,RegLogSucces} from './redux/actions'
-import Axios from 'axios'
-import Loading from './components/loading'
+import Search from './pages/search'
+import Transaksipenjual from './pages/penjual/transaksipenjual';
+import Transaksiuser from './pages/user/transaksiuser';
 
 
 class App extends React.Component {
@@ -70,6 +73,9 @@ class App extends React.Component {
           <Route path='/jualreg' component={JualReg}/>
           <Route path='/verified' component={Verified}/>
           <Route path='/resendverif' component={ResendVerif}/>
+          <Route path='/search' component={Search}/>
+          <Route path='/pentrans' component={Transaksipenjual}/>
+          <Route path='/transusers' component={Transaksiuser}/>
           <Route path='/*' component={Pagenotfound}/>
         </Switch>
     </div>  

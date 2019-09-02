@@ -17,7 +17,8 @@ import {faShoppingCart,faSearch,faBell,faStore,faUser} from '@fortawesome/free-s
 import {connect} from 'react-redux'
 import {ChangeHeader,LogOutSuccess,RegLogSucces} from './../redux/actions'
 
-// import Axios from 'axios'
+import Axios from 'axios'
+import { ApiURL } from '../supports/apiurl';
 // import { ApiURL } from '../supports/apiurl';
 
 
@@ -29,35 +30,31 @@ class Header extends React.Component {
     this.state = {
       isOpen: false,
       search: false,
+      searchtext:'',
       isTop:true,
-      createstore:true
+      createstore:true,
+      countcart:0
     };
   }
   componentDidMount(){
-   
-    // var username=localStorage.getItem('terserah')
-    
-    // if(username!==null){
-    //   Axios.get(ApiURL+'/users/cekuser?username='+username)
-    //   .then((res)=>{
-    //       console.log(res.data)
-    //       this.props.RegLogSucces(res.data[0])
-    //       console.log(this.props.LogReg)
-    //   })
-    //   .catch((err)=>{
-    //     console.log(err)
-    //   })
-    // }
+    Axios.get(ApiURL+'/cart/getcountcart/'+this.props.LogReg.id)
+    .then((res)=>{
+        console.log(res.data)
+        this.setState({countcart:res.data.jumlahcart})
+    }).catch((err)=>{
+      console.log(err)
+    })
+  }
+  // componentDidUpdate(){
+  //   Axios.get(ApiURL+'/cart/getcountcart/'+this.props.LogReg.id)
+  //   .then((res)=>{
+  //       console.log(res.data)
+  //       this.setState({countcart:res.data.jumlahcart})
+  //   }).catch((err)=>{
+  //     console.log(err)
+  //   })
+  // }
 
-  }
-  componentWillUpdate(){
-    // if(this.props.LogReg.penjualid!==null&&this.props.LogReg.username!==''){
-    //   this.setState({createstore:true})
-    // }else{
-    //   this.setState({createstore:false})
-    // }
-    // console.log(this.state.createstore)
-  }
   toggle() {
     this.setState({
       isOpen: !this.state.isOpen
@@ -69,7 +66,7 @@ class Header extends React.Component {
     if(this.refs.search.value===''){
       this.setState({search:false})
     }else{
-      this.setState({search:true})
+      this.setState({search:true,searchtext:this.refs.search.value})
     }
   }
   oncreatestorechange=()=>{
@@ -91,7 +88,7 @@ class Header extends React.Component {
     return (
       <div className={this.props.changeHead?'bg-transparent navbar-posisi':' bg-white navbar-posisi'} onScroll={this.bgnav}>
         <Navbar color="" light expand="xl" className='kontainer px-0' >
-          <Link to='/' className={this.props.changeHead?'text-white font-weight-bolder ml-2':'text-primary font-weight-bolder ml-2'}><NavbarBrand >MaSupp</NavbarBrand> </Link>
+          <NavbarBrand href='http://localhost:3000/' className={this.props.changeHead?'text-white font-weight-bolder ml-2':'text-primary font-weight-bolder ml-2'} >MaSupp</NavbarBrand>
               {this.props.LogReg.username===''?
               null
               :
@@ -100,10 +97,10 @@ class Header extends React.Component {
                 <Link to={'/cart'}>
                   <div className={this.props.changeHead?'text-light rounded position-absolute header-cart':'rounded text-primary position-absolute header-cart'}>
                     <FontAwesomeIcon icon={faShoppingCart} className='text-center'></FontAwesomeIcon>
-                    <span className={this.props.changeHead?'badge text-primary':'badge text-white '}>0</span>
+                    <span className={this.props.changeHead?'badge text-primary':'badge text-white '}>{this.state.countcart}</span>
                   </div>
                 </Link>
-                <Link to='/jualanku'>
+                <Link to='/notif'>
                   <div className={this.props.changeHead?'text-light rounded position-absolute header-bell':'rounded text-primary position-absolute header-bell'}>
                     <FontAwesomeIcon icon={faBell} className='text-center'></FontAwesomeIcon>
                     <span className={this.props.changeHead?'badge text-primary':'badge text-light '}>0</span>
@@ -134,7 +131,12 @@ class Header extends React.Component {
                     <FontAwesomeIcon icon={faSearch} className=''></FontAwesomeIcon>
                   </div>
                   <input type='search' placeholder='Search...' className={this.props.changeHead?'text-white bg-transparent change':'text-primary '} onChange={this.onSearchChange} ref='search' />
-                  <button className={this.props.changeHead?'btn btn-light text-primary' :'btn btn-primary'}>Search</button>
+                  <Link to={'/search?prod='+this.state.searchtext+'&page=1'} >
+                    <button  className={this.props.changeHead?'btn btn-light text-primary searchbtn ' :'btn btn-primary searchbtn'}>
+                      Search
+                      </button>
+                      
+                  </Link>
                 </div>
               </div>
           {/* <Collapse className={this.props.changeHead?'header-search-top position-absolute header-search search-open':'position-absolute header-search search-open'} isOpen={this.state.search} scrolling  >
@@ -179,14 +181,10 @@ class Header extends React.Component {
                   </NavItem>
               </Nav>
                 :
-                
-
-
-                
                 <Collapse isOpen={this.state.isOpen} navbar className='mg-collapse'>
                   <Nav className="ml-auto" navbar>
                       <NavItem>
-                        <Link to='/history'><NavLink className={this.props.changeHead?'text-white ml-md-0 ml-3':'ml-md-0 text-primary ml-3'}>Transaksi</NavLink> </Link>
+                       <NavLink href='http://localhost:3000/history?stat=waiting' className={this.props.changeHead?'text-white ml-md-0 ml-3':'ml-md-0 text-primary ml-3'}>Transaksi</NavLink>
                       </NavItem>
                       <UncontrolledDropdown nav inNavbar>
                         <DropdownToggle nav className={this.props.changeHead?'text-white ml-md-0 ml-3':'ml-md-0 text-primary ml-3'}>
@@ -194,7 +192,7 @@ class Header extends React.Component {
                         </DropdownToggle>
                         <DropdownMenu right>
                           <DropdownItem>
-                          <Link to='/manageadmin'>Admin</Link>
+                          <Link to={'/manageadmin?trans=conmin'}>Admin</Link>
                           </DropdownItem>
                           {this.props.LogReg.statusver==='Unverified'?
                         <Link to='/resendverif'>

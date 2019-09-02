@@ -13,13 +13,16 @@ class Notif extends Component {
                 this.props.ChangeHeader(isTop)
                 console.log(this.props.changeHead)
             }
-        });
+        })
+        
+
     }
-    render() { 
+    render() {
+        this.props.ChangeHeader(false)  
         return (
-            <div className='mt-5'>
+            <div className='home'>
                 <h1>ini Notif</h1>
-                <Loading/>
+                
             </div>
          );
     }

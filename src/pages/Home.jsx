@@ -36,7 +36,7 @@ class Home extends Component {
     renderallproduct=()=>{
         return this.state.listallproduct.map((item)=>{
             return(
-                <div className=" text-dark col-md-2 col-6 p-1" >
+                <div className=" text-dark col-md-2 col-6 p-1" key={item.id}>
                     <Link to={'/detailprod/'+item.id} style={{textDecoration:'none'}}>
                         <div className="card bg-light" style={{height:'300px',fontSize:'17px'}}>
                             <img src={`${ApiURL+item.image}`} alt={item.id} height='150px' width='100%'/>
