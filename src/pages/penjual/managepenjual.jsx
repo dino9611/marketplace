@@ -328,5 +328,5 @@ const MapStateToProps=(state)=>{
         changeHead:state.HeaderBg,
         LogReg:state.LogReg
     }
-  }
+}
 export default  connect(MapStateToProps,{ChangeHeader}) (Jualanku);

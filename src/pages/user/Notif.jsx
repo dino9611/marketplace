@@ -1,10 +1,16 @@
 import React,  { Component } from 'react';
 import Loading from './../../components/loading'
 import {connect} from 'react-redux'
-import {ChangeHeader} from './../../redux/actions'
-
+import {ChangeHeader,CountCartnotif} from './../../redux/actions'
+import Axios from 'axios';
+import {Table,
+} from 'reactstrap'
+import { ApiURL } from '../../supports/apiurl';
 class Notif extends Component {
-    state = {  }
+    state = {
+        NotifList:null,
+        limit:10
+      }
     componentDidMount(){
         this.props.ChangeHeader(false) 
         document.removeEventListener('scroll', () => {
@@ -15,17 +21,76 @@ class Notif extends Component {
             }
         })
         
+        Axios.get(ApiURL+'/transaksi/Getnotif',{
+            params:{
+                limit:this.state.limit,
+                userid:this.props.LogReg.id
+            }
+        }).then((res)=>{
+            this.props.CountCartnotif(this.props.LogReg.id)
+            this.setState({NotifList:res.data})
+        }).catch((err)=>{
+            console.log(err)
+        })
 
     }
+    onbtnlebih=()=>{
+        var limitlama=this.state.limit
+        var limitbaru=limitlama+10
+        console.log(limitbaru)
+        this.setState({limit:limitbaru})
+        console.log(this.state.limit)
+            Axios.get(ApiURL+'/transaksi/Getnotif',{
+                params:{
+                    limit:limitbaru,
+                    userid:this.props.LogReg.id
+                }
+            }).then((res)=>{
+                this.props.CountCartnotif(this.props.LogReg.id)
+                this.setState({NotifList:res.data})
+            }).catch((err)=>{
+                console.log(err)
+            })
+
+    }
+    renderlistnotif=()=>{
+        return this.state.NotifList.map((item,index)=>{
+            return (
+            <tr key={item.id}>
+                <td>{index+1}</td>
+                <td>{item.message}</td>
+            </tr>
+            )
+        })
+    }
+
     render() {
-        this.props.ChangeHeader(false)  
+        this.props.ChangeHeader(false)
+        if(this.state.NotifList===null){
+            return <Loading/>
+        }  
         return (
             <div className='home'>
-                <h1>ini Notif</h1>
-                
+                <Table className='mt-2' striped hover>
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Notifikasi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {this.renderlistnotif()}
+                    </tbody>
+                </Table>
+                <button onClick={this.onbtnlebih}>lebih</button>
             </div>
          );
     }
 }
- 
-export default connect(null,{ChangeHeader}) (Notif);
+const MapStateToProps=(state)=>{
+    return{
+        changeHead:state.HeaderBg,
+        LogReg:state.LogReg
+    }
+} 
+export default connect(MapStateToProps,{ChangeHeader,CountCartnotif}) (Notif);

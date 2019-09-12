@@ -31,6 +31,7 @@ class TransaksiUser extends React.Component {
             Axios.get(ApiURL+'/transaksi/getpesananBelumproses/'+this.props.LogReg.id)
             .then((res)=>{
                 console.log(res.data)
+                
                 this.setState({TransaksiList:res.data})
             })
         }else if(querystring.parse(this.props.location.search).stat==='proses'){

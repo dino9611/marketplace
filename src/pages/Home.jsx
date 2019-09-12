@@ -12,6 +12,9 @@ import Numeral from 'numeral'
 // import Header from './../components/header'
 import Axios from 'axios'
 import { ApiURL } from '../supports/apiurl';
+import Slider from 'react-slick'
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
 class Home extends Component {
     state = {
         listallproduct:[]
@@ -36,7 +39,7 @@ class Home extends Component {
     renderallproduct=()=>{
         return this.state.listallproduct.map((item)=>{
             return(
-                <div className=" text-dark col-md-2 col-6 p-1" key={item.id}>
+                <div className=" text-dark p-1" key={item.id}>
                     <Link to={'/detailprod/'+item.id} style={{textDecoration:'none'}}>
                         <div className="card bg-light" style={{height:'300px',fontSize:'17px'}}>
                             <img src={`${ApiURL+item.image}`} alt={item.id} height='150px' width='100%'/>
@@ -58,7 +61,43 @@ class Home extends Component {
         })
     }
     render(){
-
+        const settings = {
+            className:'center',
+            centerPadding: "60px",
+            // centerMode:true,
+            dots: true,
+            infinite: true,
+            speed: 500,
+            slidesToShow: 6,
+            slidesToScroll: 1,
+            autoplay:true,
+            responsive: [
+                {
+                  breakpoint: 1024,
+                  settings: {
+                    slidesToShow: 4,
+                    slidesToScroll: 1,
+                    infinite: true,
+                    dots: true
+                  }
+                },
+                {
+                  breakpoint: 600,
+                  settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 2,
+                    initialSlide: 2
+                  }
+                },
+                {
+                  breakpoint: 480,
+                  settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1
+                  }
+                }
+              ]
+          };
         return (
             <div className=''>
 
@@ -83,9 +122,9 @@ class Home extends Component {
                         </div>
                     </div>
                     <div className="kontainer ">
-                        <div className="row ">
+                        <Slider {...settings}>
                             {this.renderallproduct()}
-                        </div>
+                        </Slider>  
                     </div>
                     <div className='mr-3'>
                         <Jumbo/>

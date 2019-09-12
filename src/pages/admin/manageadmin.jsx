@@ -111,6 +111,7 @@ class ManageAdmin extends React.Component {
         }
     }
     render() {
+        this.props.ChangeHeader(false)
         if(this.state.confirmpaylist===null){
             return <Loading/>
         } 

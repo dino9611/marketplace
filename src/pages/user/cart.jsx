@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux'
-import {ChangeHeader} from './../../redux/actions'
+import {ChangeHeader,CountCartnotif} from './../../redux/actions'
 import {Table,
     Modal,ModalHeader,ModalBody,ModalFooter
 } from 'reactstrap'
@@ -79,6 +79,7 @@ class Cart extends React.Component {
     OnBtndeletecart=(itemid)=>{
         Axios.delete(ApiURL+'/cart/deletecart/'+itemid+'?userid='+this.props.LogReg.id)
         .then((res)=>{
+            this.props.CountCartnotif(this.props.LogReg.id)
             this.setState({cartlist:res.data,modaldeleteindex:-1,deletemodal:false})
         }).catch((err)=>{
             console.log(err)
@@ -249,4 +250,4 @@ const MapStateToProps=(state)=>{
         LogReg:state.LogReg
     }
 }
-export default connect(MapStateToProps,{ChangeHeader}) (Cart);
+export default connect(MapStateToProps,{ChangeHeader,CountCartnotif}) (Cart);

@@ -14,7 +14,8 @@ class Search extends Component {
         listallproduct:null,
         paginationitem:0,
         currentpage:0,
-        keywordsearch:''
+        keywordsearch:'',
+        Categorysearch:'Semua Product'
     }
     componentDidMount(){
         this.props.ChangeHeader(false) 
@@ -27,30 +28,29 @@ class Search extends Component {
         })
         var query=querystring.parse(this.props.location.search)
         console.log(querystring.parse(this.props.location.search))
-        Axios.get(`${ApiURL}/product/getsearchproduct?prod=${query.prod}&page=${query.page}`)
+        Axios.get(`${ApiURL}/product/getsearchproduct?prod=${query.prod}&page=${query.page}&cat=${query.cat}`)
         .then((res)=>{
             console.log(res.data)
-            this.setState({listallproduct:res.data.pagination,paginationitem:res.data.page.jumlah,currentpage:parseInt(query.page)})
-        }).catch((err)=>{
-            console.log(err)
-        })
-    }
-    componentDidUpdate(){
-        var query=querystring.parse(this.props.location.search)
-        Axios.get(`${ApiURL}/product/getsearchproduct?prod=${query.prod}&page=${query.page}`)
-        .then((res)=>{
-            console.log(res.data)
-            this.setState({listallproduct:res.data.pagination,paginationitem:res.data.page.jumlah,currentpage:parseInt(query.page)})
+            if(res.data.pagination.length===0){
+                this.setState({listallproduct:res.data.pagination,paginationitem:res.data.page.jumlah,currentpage:parseInt(query.page),Categorysearch:''})
+            }else{
+                if(query.cat!=='0'){
+                    this.setState({listallproduct:res.data.pagination,paginationitem:res.data.page.jumlah,currentpage:parseInt(query.page),Categorysearch:res.data.pagination[0].namacategory})
+                }else{
+                    this.setState({listallproduct:res.data.pagination,paginationitem:res.data.page.jumlah,currentpage:parseInt(query.page)})
+                }
+            }
         }).catch((err)=>{
             console.log(err)
         })
     }
 
+
     renderAllProduct=()=>{
         return this.state.listallproduct.map((item)=>{
             return(
-                <div className=" text-dark col-md-2 col-6 p-1" >
-                    <Link to={'/detailprod/'+item.id} style={{textDecoration:'none'}}>
+                <div className=" text-dark col-md-2 col-6 p-1" key={item.id}>
+                    <Link to={'/detailprod/'+item.id} style={{textDecoration:'none'}} key={item.id}>
                         <div className="card bg-light" style={{height:'300px',fontSize:'17px'}}>
                             <img src={`${ApiURL+item.image}`} alt={item.id} height='150px' width='100%'/>
                             <div className='mt-1 font-weight-bolder px-3 text-dark'>
@@ -74,28 +74,41 @@ class Search extends Component {
         var query=querystring.parse(this.props.location.search)
         var akhir=Math.ceil(this.state.paginationitem/2)//dibagi 2 karena dicoba 2 item perpage
         var jsx=[]
-        for(var i=this.state.currentpage;i<this.state.currentpage+2;i++){ //plus 2 karena 2 page aja
-            if(this.state.currentpage===akhir){
-                jsx.push(
-                    <div>
-                        <PaginationItem active={this.state.currentpage===i-1?true:false}>
-                            <PaginationLink href={`http://localhost:3000/search?prod=${query.prod}&page=${i-1}`}>
-                                {i-1}
-                            </PaginationLink>
-                        </PaginationItem>
-                    </div>
-                )
-            }else{
-                jsx.push(<div>
-                         <PaginationItem active={this.state.currentpage===i?true:false}>
-                             <PaginationLink href={`http://localhost:3000/search?prod=${query.prod}&page=${i}`}>
-                                 {i}
-                             </PaginationLink>
-                         </PaginationItem>
-                     </div>
-                     )
-
+        if(akhir===1){
+            jsx.push(
+            <div>
+                <PaginationItem active={this.state.currentpage===1?true:false}>
+                    <PaginationLink href={`http://localhost:3000/search?prod=${query.prod}&page=${1}`}>
+                        {1}
+                    </PaginationLink>
+                </PaginationItem>
+            </div>
+            )
+        }else{
+            for(var i=this.state.currentpage;i<this.state.currentpage+2;i++){ //plus 2 karena 2 page aja
+                if(this.state.currentpage===akhir){
+                    jsx.push(
+                        <div>
+                            <PaginationItem active={this.state.currentpage===i-1?true:false}>
+                                <PaginationLink href={`http://localhost:3000/search?prod=${query.prod}&page=${i-1}`}>
+                                    {i-1}
+                                </PaginationLink>
+                            </PaginationItem>
+                        </div>
+                    )
+                }else{
+                    jsx.push(<div>
+                             <PaginationItem active={this.state.currentpage===i?true:false}>
+                                 <PaginationLink href={`http://localhost:3000/search?prod=${query.prod}&page=${i}`}>
+                                     {i}
+                                 </PaginationLink>
+                             </PaginationItem>
+                         </div>
+                         )
+    
+                }
             }
+
         }
         return jsx
     }
@@ -109,11 +122,12 @@ class Search extends Component {
             return <Loading/>
         }
         if(this.state.listallproduct.length===0){
-            return <h1>product tidak ada</h1>
+            return <h1 className='home'>product tidak ada</h1>
         }
         return (
             <div className='home kontainer'>
-                <h4>keyword :"{query.prod===''?'tidak ada keyword':query.prod}" </h4>
+                <h5>Keyword :"{query.prod===''?'tidak ada keyword':query.prod}" </h5>
+                <h5>Category :"{this.state.Categorysearch}" </h5>
                 <div className="row">
                     {this.renderAllProduct()}
 

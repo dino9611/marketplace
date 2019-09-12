@@ -26,6 +26,7 @@ import ResendVerif from './pages/user/resendverif'
 import Search from './pages/search'
 import Transaksipenjual from './pages/penjual/transaksipenjual';
 import Transaksiuser from './pages/user/transaksiuser';
+import PenjualSetting from './pages/penjual/penjualSetting'
 
 
 class App extends React.Component {
@@ -76,6 +77,7 @@ class App extends React.Component {
           <Route path='/search' component={Search}/>
           <Route path='/pentrans' component={Transaksipenjual}/>
           <Route path='/transusers' component={Transaksiuser}/>
+          <Route path='/penjualsetting' component={PenjualSetting}/>
           <Route path='/*' component={Pagenotfound}/>
         </Switch>
     </div>  

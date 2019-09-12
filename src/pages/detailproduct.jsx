@@ -5,7 +5,7 @@ import classnames from 'classnames'
 import Fade from 'react-reveal/Fade'
 import Axios from 'axios'
 import {connect} from 'react-redux'
-import {ChangeHeader} from './../redux/actions'
+import {ChangeHeader,CountCartnotif} from './../redux/actions'
 import { ApiURL } from '../supports/apiurl';
 import Loading from './../components/loading'
 import {Link} from 'react-router-dom'
@@ -17,7 +17,8 @@ class DetailProd extends React.Component {
         activeTab: '1',
         jumlahorder:1,
         proddata:null,
-        loginfo:false
+        loginfo:false,
+        penjualsama:false
       }
     componentDidMount(){
         this.props.ChangeHeader(false)
@@ -57,20 +58,25 @@ class DetailProd extends React.Component {
         }   
     }
     onBtnAddToCart=()=>{
-        console.log(this.props.LogReg)
-        var data={
-            userid:this.props.LogReg.id,
-            productid:this.state.proddata.id,
-            penjualid:this.state.proddata.penjualid,
-            quantity:this.state.jumlahorder
+        if(this.state.proddata.penjualid===this.props.LogReg.penjualid){
+            this.setState({loginfo:true,penjualsama:true})
+        }else{
+            var data={
+                userid:this.props.LogReg.id,
+                productid:this.state.proddata.id,
+                penjualid:this.state.proddata.penjualid,
+                quantity:this.state.jumlahorder
+            }
+            Axios.post(`${ApiURL}/cart/addtocart`,data)
+            .then((res)=>{
+                console.log(res.data)
+                this.props.CountCartnotif(this.props.LogReg.id)
+                this.setState({loginfo:true})
+            }).catch((err)=>{
+                console.log(err)
+            })
+
         }
-        Axios.post(`${ApiURL}/cart/addtocart`,data)
-        .then((res)=>{
-            console.log(res.data)
-            this.setState({loginfo:true})
-        }).catch((err)=>{
-            console.log(err)
-        })
     }
     render() {
         this.props.ChangeHeader(false)
@@ -81,15 +87,15 @@ class DetailProd extends React.Component {
         }
         return (
             <div>
-                <Modal isOpen={this.state.loginfo} toggle={()=>this.setState({loginfo:false})} className='text-primary font-weight-bolder' centered='true'>
+                <Modal isOpen={this.state.loginfo} toggle={()=>this.setState({loginfo:false,penjualsama:false})} className='text-primary font-weight-bolder' centered='true'>
                     {/* <ModalHeader className=''>
                         <div className='btn btn-danger rounded-circle text-center flex-end' onClick={()=>this.setState({loginfo:false})}>X</div>
                     </ModalHeader> */}
                     <ModalBody style={{height:'70px',alignSelf:'center',justifySelf:'center'}}>
-                        {'Product Berhasil masuk ke Cart'}
+                        {this.state.penjualsama?'Anda tidak bisa membeli barang anda sendiri':'Product Berhasil masuk ke Cart'}
                     </ModalBody>
                     <ModalFooter className="pt-2">
-                        <input type='button' value='OK'className='btn btn-primary rounded-pill' style={{width:'100px'}} onClick={()=>this.setState({loginfo:false})} />
+                        <input type='button' value='OK'className='btn btn-primary rounded-pill' style={{width:'100px'}} onClick={()=>this.setState({loginfo:false,penjualsama:false})} />
                     </ModalFooter>
                 </Modal>
                 <Fade>
@@ -206,4 +212,4 @@ const MapStateToProps=(state)=>{
         LogReg:state.LogReg
     }
   } 
-export default connect(MapStateToProps,{ChangeHeader}) (DetailProd);
+export default connect(MapStateToProps,{ChangeHeader,CountCartnotif}) (DetailProd);

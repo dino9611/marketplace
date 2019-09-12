@@ -15,10 +15,10 @@ import {Link} from 'react-router-dom'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faShoppingCart,faSearch,faBell,faStore,faUser} from '@fortawesome/free-solid-svg-icons'
 import {connect} from 'react-redux'
-import {ChangeHeader,LogOutSuccess,RegLogSucces} from './../redux/actions'
+import {ChangeHeader,LogOutSuccess,RegLogSucces,CountCartnotif} from './../redux/actions'
 
-import Axios from 'axios'
-import { ApiURL } from '../supports/apiurl';
+// import Axios from 'axios'
+// import { ApiURL } from '../supports/apiurl';
 // import { ApiURL } from '../supports/apiurl';
 
 
@@ -33,17 +33,20 @@ class Header extends React.Component {
       searchtext:'',
       isTop:true,
       createstore:true,
-      countcart:0
+      countcart:0,
+      changeCat:0
     };
   }
   componentDidMount(){
-    Axios.get(ApiURL+'/cart/getcountcart/'+this.props.LogReg.id)
-    .then((res)=>{
-        console.log(res.data)
-        this.setState({countcart:res.data.jumlahcart})
-    }).catch((err)=>{
-      console.log(err)
-    })
+    // Axios.get(ApiURL+'/cart/getcountcart/'+this.props.LogReg.id)
+    // .then((res)=>{
+    //     console.log(res.data)
+    //     this.setState({countcart:res.data.jumlahcart})
+    // }).catch((err)=>{
+    //   console.log(err)
+    // })
+    this.props.CountCartnotif(this.props.LogReg.id)
+    
   }
   // componentDidUpdate(){
   //   Axios.get(ApiURL+'/cart/getcountcart/'+this.props.LogReg.id)
@@ -69,6 +72,7 @@ class Header extends React.Component {
       this.setState({search:true,searchtext:this.refs.search.value})
     }
   }
+  
   oncreatestorechange=()=>{
     if(this.props.LogReg.penjualid!==null&&this.props.LogReg.username!==''){
       this.setState({createstore:true})
@@ -87,8 +91,8 @@ class Header extends React.Component {
   render() {
     return (
       <div className={this.props.changeHead?'bg-transparent navbar-posisi':' bg-white navbar-posisi'} onScroll={this.bgnav}>
-        <Navbar color="" light expand="xl" className='kontainer px-0' >
-          <NavbarBrand href='http://localhost:3000/' className={this.props.changeHead?'text-white font-weight-bolder ml-2':'text-primary font-weight-bolder ml-2'} >MaSupp</NavbarBrand>
+        <Navbar color="" light expand="xl" className='kontainer px-0 bg-transparent' >
+          <NavbarBrand href='http://localhost:3000/' className={this.props.changeHead?'text-white font-weight-bolder ml-2':'text-primary font-weight-bolder ml-2'} >Roli</NavbarBrand>
               {this.props.LogReg.username===''?
               null
               :
@@ -97,13 +101,13 @@ class Header extends React.Component {
                 <Link to={'/cart'}>
                   <div className={this.props.changeHead?'text-light rounded position-absolute header-cart':'rounded text-primary position-absolute header-cart'}>
                     <FontAwesomeIcon icon={faShoppingCart} className='text-center'></FontAwesomeIcon>
-                    <span className={this.props.changeHead?'badge text-primary':'badge text-white '}>{this.state.countcart}</span>
+                    <span className={this.props.changeHead?'badge text-primary':'badge text-white '}>{this.props.jumlahcartnotif.jumlahcart}</span>
                   </div>
                 </Link>
                 <Link to='/notif'>
                   <div className={this.props.changeHead?'text-light rounded position-absolute header-bell':'rounded text-primary position-absolute header-bell'}>
                     <FontAwesomeIcon icon={faBell} className='text-center'></FontAwesomeIcon>
-                    <span className={this.props.changeHead?'badge text-primary':'badge text-light '}>0</span>
+                    <span className={this.props.changeHead?'badge text-primary':'badge text-light '}>{this.props.jumlahcartnotif.jumlahnotif}</span>
                   </div>
                 </Link>
               </div>
@@ -131,41 +135,29 @@ class Header extends React.Component {
                     <FontAwesomeIcon icon={faSearch} className=''></FontAwesomeIcon>
                   </div>
                   <input type='search' placeholder='Search...' className={this.props.changeHead?'text-white bg-transparent change':'text-primary '} onChange={this.onSearchChange} ref='search' />
-                  <Link to={'/search?prod='+this.state.searchtext+'&page=1'} >
-                    <button  className={this.props.changeHead?'btn btn-light text-primary searchbtn ' :'btn btn-primary searchbtn'}>
+                  <a href={"http://localhost:3000/search?prod="+this.state.searchtext+'&page=1&cat='+this.state.changeCat}>
+                    <button  className={this.props.changeHead?'bg-transparent  searchbtn  btnborder' :' btn-primary searchbtn1'}>
                       Search
-                      </button>
-                      
-                  </Link>
+                    </button>
+                  </a>
                 </div>
               </div>
-          {/* <Collapse className={this.props.changeHead?'header-search-top position-absolute header-search search-open':'position-absolute header-search search-open'} isOpen={this.state.search} scrolling  >
-           <div className={this.props.changeHead?'bg-transparent text-light pl-1 overflow-auto ':'bg-white pl-1 overflow-auto '} style={{height:'200px'}}>
-             <ul>
-                <li>sdadasdas</li>
-                <li>sdadasdas</li>
-                <li>sdadasdas</li>
-                <li>sdadasdas</li>
-                <li>sdadasdas</li>
-                <li>sdadasdas</li>   <li>sdadasdas</li>
-                <li>sdadasdas</li>
-                <li>sdadasdas</li>
-                <li>sdadasdas</li>
-                <li>sdadasdas</li>
-                <li>sdadasdas</li>   <li>sdadasdas</li>
-                <li>sdadasdas</li>
-                <li>sdadasdas</li>
-                <li>sdadasdas</li>
-                <li>sdadasdas</li>
-                <li>sdadasdas</li>   <li>sdadasdas</li>
-                <li>sdadasdas</li>
-                <li>sdadasdas</li>
-                <li>sdadasdas</li>
-                <li>sdadasdas</li>
-                <li>sdadasdas</li>
-             </ul>
-            </div>
-          </Collapse> */}
+              <div className='bg-transparent'>
+                <select ref='category' className={this.props.changeHead?' header-category header-category-color':'header-category1 header-category-color1 '} onChange={()=>this.setState({changeCat:this.refs.category.value})} >
+                  <optgroup label='Kategori' className='text-primary'>
+                    <option value='0' >Semua Produk</option>
+                    <option value="1" >Karbo/Biji</option>
+                    <option value="2" >Seafood</option>
+                    <option value="3" >Tambak</option>
+                    <option value="4" >Daging</option>
+                    <option value="5" >Unggas</option>
+                    <option value="6" >Sayur-mayur</option>
+                    <option value="7" >Buah</option>
+                    <option value="8" >Ikan Air tawar</option>
+                    <option value="9" >Umbi-umbian</option>
+                  </optgroup>
+                </select>
+              </div>
           {this.props.LogReg.username===''?null:<NavbarToggler onClick={this.toggle} className={this.props.changeHead?'ml-2 ':'ml-2 bg-primary'} ></NavbarToggler>}
               {this.props.LogReg.username===''?
               <Nav className='ml-md-auto ml-1' >
@@ -191,9 +183,23 @@ class Header extends React.Component {
                           <FontAwesomeIcon icon={faUser}/><span className='ml-2'>{this.props.LogReg.username}</span>
                         </DropdownToggle>
                         <DropdownMenu right>
-                          <DropdownItem>
-                          <Link to={'/manageadmin?trans=conmin'}>Admin</Link>
-                          </DropdownItem>
+                          {this.props.LogReg.roleid===2||this.props.LogReg.roleid===1?
+
+                            <DropdownItem>
+                              <Link to={'/manageadmin?trans=conmin'}>Admin</Link>
+                            </DropdownItem>
+
+                            :
+                            null
+                          }
+                          {
+                            this.props.LogReg.penjualid?
+                            <DropdownItem>
+                              <Link to={'/penjualsetting'}>Seller Settings</Link>
+                            </DropdownItem>
+                            :
+                            null
+                          }
                           {this.props.LogReg.statusver==='Unverified'?
                         <Link to='/resendverif'>
                           <DropdownItem>
@@ -231,7 +237,8 @@ class Header extends React.Component {
 const MapStateToProps=(state)=>{
   return{
       changeHead:state.HeaderBg,
-      LogReg:state.LogReg
+      LogReg:state.LogReg,
+      jumlahcartnotif:state.Countcartnotif
   }
 }
-export default connect(MapStateToProps,{ChangeHeader,LogOutSuccess,RegLogSucces}) (Header);
+export default connect(MapStateToProps,{ChangeHeader,LogOutSuccess,RegLogSucces,CountCartnotif}) (Header);

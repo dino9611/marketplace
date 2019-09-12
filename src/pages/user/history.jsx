@@ -37,6 +37,8 @@ class History extends React.Component {
             Axios.get(ApiURL+'/transaksi/getwaitingpayment/'+this.props.LogReg.id)
             .then((res)=>{
                 console.log(res.data)
+                var d=new Date(res.data[0].tglexp).getTime()
+                console.log(d)
                 this.setState({waitingpaymentlist:res.data,})
             })
             .catch((err)=>{
