@@ -34,3 +34,13 @@ export const CountCartnotif=(idusers)=>{
         })
     }
 }
+export const Categorylistload=()=>{
+    return(dispatch)=>{
+        Axios.get(ApiURL+'/admin/getAllcategoies')
+        .then((res)=>{
+            dispatch({type:'LIST_CATEGORY',payload:res.data.prod})
+        }).catch((err)=>{
+            console.log(err)
+        })
+    }
+}

@@ -91,12 +91,11 @@ class DetailToko  extends React.Component {
                 <div className="row ">
                     <div className="col-md-9 p-0 ">
                         <div style={{ height:'450px'}} className='card bg-light ' >
-                            <img src={ApiURL+'/product/images/home-foto.jpg'} alt="toko-profile-banner" height='200px'/>
+                            <img src={ApiURL+this.state.datatoko.imagebackground} alt="toko-profile-banner" height='200px'/>
                             <div className="px-2 row">
                                 <div className='  col-2 pl-3 py-0 pr-0'>
                                     <div className="detail-profile ">
-                                        <img src={ApiURL+'/product/images/home-foto.jpg'} width='100%' height='150px' alt=""/>
-
+                                        <img src={ApiURL+this.state.datatoko.imageprofile} width='100%' height='150px' alt=""/>
                                     </div>
                                 </div>
                                 <div className="col-10">
@@ -104,8 +103,7 @@ class DetailToko  extends React.Component {
                                 </div>
                             </div>
                             <div className='margin-toko px-2'>
-                                about toko masih null
-                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nulla, dicta neque numquam reiciendis consequuntur laudantium deleniti dolore et voluptates possimus. Sit consequuntur repellendus atque itaque exercitationem. Eius corrupti ea nemo.
+                                {this.state.datatoko.abouttoko}
 
                             </div>
                         </div>
@@ -113,8 +111,8 @@ class DetailToko  extends React.Component {
                     <div className="col-md-3 p-5">
                         <div style={{ height:'200px'}} className='card bg-light px-3 py-3' >
                             <center>
-                                <img  src="https://ecs7.tokopedia.net/img/cache/700/product-1/2017/4/10/17182546/17182546_3ba76881-816b-4811-a0e4-56774f14239f_2048_1365.jpg" alt="" height='60px' width='60px'/>
-                                <div className='p-1' >nama toko</div>
+                                <img src={ApiURL+this.state.datatoko.imageprofile} alt="" height='60px' width='60px'/>
+                                <div className='p-1' >{this.state.datatoko.namatoko}</div>
                             </center>
                             <div className="row ">
                                 <div className="col-6 border-dark pt-2" style={{borderRight:'0.5px solid grey',height:'70px'}}>

@@ -61,13 +61,19 @@ class DetailProd extends React.Component {
         if(this.state.proddata.penjualid===this.props.LogReg.penjualid){
             this.setState({loginfo:true,penjualsama:true})
         }else{
+            const token=localStorage.getItem('token')
+            const headers={
+                headers:{
+                    'Authorization':`Bearer ${token}`
+                }
+            }
             var data={
                 userid:this.props.LogReg.id,
                 productid:this.state.proddata.id,
                 penjualid:this.state.proddata.penjualid,
                 quantity:this.state.jumlahorder
             }
-            Axios.post(`${ApiURL}/cart/addtocart`,data)
+            Axios.post(`${ApiURL}/cart/addtocart`,data,headers)
             .then((res)=>{
                 console.log(res.data)
                 this.props.CountCartnotif(this.props.LogReg.id)
@@ -87,7 +93,7 @@ class DetailProd extends React.Component {
         }
         return (
             <div>
-                <Modal isOpen={this.state.loginfo} toggle={()=>this.setState({loginfo:false,penjualsama:false})} className='text-primary font-weight-bolder' centered='true'>
+                <Modal isOpen={this.state.loginfo} toggle={()=>this.setState({loginfo:false,penjualsama:false})} className='text-primary font-weight-bolder' centered>
                     {/* <ModalHeader className=''>
                         <div className='btn btn-danger rounded-circle text-center flex-end' onClick={()=>this.setState({loginfo:false})}>X</div>
                     </ModalHeader> */}

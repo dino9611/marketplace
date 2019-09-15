@@ -40,7 +40,8 @@ class App extends React.Component {
       Axios.get(ApiURL+'/users/cekuser?username='+username)
       .then((res)=>{
           console.log(res.data)
-          this.props.RegLogSucces(res.data[0])
+          this.props.RegLogSucces(res.data.data[0])
+          localStorage.setItem('token',res.data.token)
           this.setState({loading:false})
           console.log(this.props.LogReg)
       })

@@ -60,11 +60,12 @@ class Register extends React.Component {
                         .then((res)=>{
                             console.log(res.data)
                             this.setState({loading:false})
-                            localStorage.setItem('terserah',res.data[0].username)
-                            localStorage.setItem('login','login')
-                            this.props.RegLogSucces(res.data[0])
+                            localStorage.setItem('terserah',res.data.data[0].username)
+                            localStorage.setItem('token',res.data.token)
+                            this.props.RegLogSucces(res.data.data[0])
                         })
                         .catch((err)=>{
+                            this.setState({loading:false})
                             console.log(err);
                         })
                     }

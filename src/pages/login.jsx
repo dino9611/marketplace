@@ -25,6 +25,7 @@ class Login extends React.Component {
         });
     }
       onBtnLoginclick=()=>{
+        this.setState({loading:true})        
         var username=this.refs.username.refs.username.value
         var password=this.refs.pass.refs.pass.value
         // var checkemail=username.split('').filter(val=>val==='@')[0]
@@ -37,16 +38,16 @@ class Login extends React.Component {
             .then((res)=>{
                 console.log(res.data)
                 if(res.data.status==='error'){
-                    this.setState({error:res.data.error})
+                    this.setState({error:res.data.error,loading:false})
                 }
                 else{
-                    this.setState({loading:true})
-                    localStorage.setItem('terserah',res.data[0].username)
-                    localStorage.setItem('login','login')
-                    this.props.RegLogSucces(res.data[0])
+                    localStorage.setItem('terserah',res.data.data[0].username)
+                    localStorage.setItem('token',res.data.token)
+                    this.props.RegLogSucces(res.data.data[0])
                 }
             })
             .catch((err)=>{
+                this.setState({loading:false})
                 console.log(err)
             })
         }
@@ -69,14 +70,14 @@ class Login extends React.Component {
                 <div className="kontainer ">
                     <div className='row justify-content-center mt-5'>
                         <div className="col-md-6 p-5 ">
-                            <div className='px-5 py-5 login' square={false} classes=''>
+                            <div className='px-5 py-5 login' square='false' classes=''>
                                 <h1 className='text-primary'>LOGIN</h1>
                                 <InputGroup className='mb-3 '>
-                                    <InputGroupAddon><FontAwesomeIcon icon={faUser} className='mr-2 mt-2 text-primary'/></InputGroupAddon>
+                                    <InputGroupAddon addonType='append'><FontAwesomeIcon icon={faUser} className='mr-2 mt-2 text-primary'/></InputGroupAddon>
                                     <Input ref='username' innerRef='username' type='text' placeholder='username'/>
                                 </InputGroup>
                                 <InputGroup className='mt-3 mb-3'>
-                                    <InputGroupAddon><FontAwesomeIcon icon={faLock} className='mr-2 mt-2 text-primary'/></InputGroupAddon>
+                                    <InputGroupAddon addonType='prepend'><FontAwesomeIcon icon={faLock} className='mr-2 mt-2 text-primary'/></InputGroupAddon>
                                     <Input ref='pass' innerRef='pass' type='password' placeholder='password' />
                                 </InputGroup>
                                 

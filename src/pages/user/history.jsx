@@ -20,7 +20,8 @@ class History extends React.Component {
         editUplaodPayfile:undefined,
         modalupload:false,
         uploadid:0,
-        suksespaymodal:false
+        suksespaymodal:false,
+        waktusekarang:null
     }
     componentDidMount(){
         this.props.ChangeHeader(false) 
@@ -37,8 +38,13 @@ class History extends React.Component {
             Axios.get(ApiURL+'/transaksi/getwaitingpayment/'+this.props.LogReg.id)
             .then((res)=>{
                 console.log(res.data)
-                var d=new Date(res.data[0].tglexp).getTime()
-                console.log(d)
+                if(res.data.length!==0){
+                    var d=new Date(res.data[0].tglexp).getTime()
+                    console.log(d)
+                    console.log(Date.now())
+                    window.setInterval(()=>this.setState({waktusekarang:Date.now()}),1000)
+                    
+                }
                 this.setState({waitingpaymentlist:res.data,})
             })
             .catch((err)=>{
@@ -107,6 +113,19 @@ class History extends React.Component {
     }
     renderpaymentlist=()=>{
         if(querystring.parse(this.props.location.search).stat==='waitcon'){
+            if(this.state.waitingpaymentlist.length===0){
+                return(
+                <tr>
+                    <td colSpan='5' rowSpan='10'>
+                        <div style={{height:'400px',fontSize:'36px'}}className='justify-content-center d-flex align-items-center'>
+                            <div className='pointer-add'>
+                                Tidak ada transaksi
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                )
+            }
             return this.state.waitingpaymentlist.map((item,index)=>{
                 return (
                     <tr key={item.id}>
@@ -119,6 +138,19 @@ class History extends React.Component {
                 )
             })
         }else if(querystring.parse(this.props.location.search).stat==='konfirmasi'){
+            if(this.state.waitingpaymentlist.length===0){
+                return(
+                <tr>
+                    <td colSpan='5' rowSpan='10'>
+                        <div style={{height:'400px',fontSize:'36px'}}className='justify-content-center d-flex align-items-center'>
+                            <div className='pointer-add'>
+                                Tidak ada transaksi
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                )
+            }
             return this.state.waitingpaymentlist.map((item,index)=>{
                 return (
                     <tr key={item.id}>
@@ -131,6 +163,19 @@ class History extends React.Component {
                 )
             })
         }
+        if(this.state.waitingpaymentlist.length===0){
+            return(
+            <tr>
+                <td colSpan='5' rowSpan='10'>
+                    <div style={{height:'400px',fontSize:'36px'}}className='justify-content-center d-flex align-items-center'>
+                        <div className='pointer-add'>
+                            Tidak ada transaksi
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            )
+        }
         return this.state.waitingpaymentlist.map((item,index)=>{
             return (
                 <tr key={item.id}>
@@ -140,6 +185,7 @@ class History extends React.Component {
                     {/* <td>{item.status}</td> */}
                     <td><button className='btn btn-primary' onClick={()=>this.onClickDetails(item.id)}>Details</button></td>
                     <td><button className='btn btn-light'onClick={()=>this.setState({uploadid:item.id,modalupload:true})} >Upload Payment</button></td>
+                    <td>{new Date(item.tglexp).getTime()-this.state.waktusekarang<=1?'Waktu habis':Numeral(new Date(item.tglexp).getTime()-this.state.waktusekarang).divide(1000).format('00:00:00')}</td>
                 </tr>
             )
         })
@@ -170,8 +216,8 @@ class History extends React.Component {
         if(this.state.waitingpaymentlist===null){
             return(
                 <Loading/>
-            )
-        } 
+                )
+            }
         return (
             <div className='home '>
                 <div className="mx-3 mb-3">
@@ -214,6 +260,7 @@ class History extends React.Component {
                                 {/* <th>status</th> */}
                                 <th>Details</th>
                                 <th></th>
+                                <th>Timer</th>
                             </tr>
                             
                         }
@@ -260,7 +307,7 @@ class History extends React.Component {
                         Upload Pembayaran
                     </ModalHeader>
                     <ModalBody>
-                        <CustomInput type='file' className='overflow-hidden mt-2' label={this.state.editUploadPayname} onChange={this.onChangeEditUploadpay}/>
+                        <CustomInput id='inputbayar' type='file' className='overflow-hidden mt-2' label={this.state.editUploadPayname} onChange={this.onChangeEditUploadpay}/>
                     </ModalBody>
                     <ModalFooter>
                         <button className='btn btn-primary'onClick={()=>this.onClickUpload(this.state.uploadid)}>Upload Pembayaran</button>

@@ -15,7 +15,7 @@ import {Link} from 'react-router-dom'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faShoppingCart,faSearch,faBell,faStore,faUser} from '@fortawesome/free-solid-svg-icons'
 import {connect} from 'react-redux'
-import {ChangeHeader,LogOutSuccess,RegLogSucces,CountCartnotif} from './../redux/actions'
+import {ChangeHeader,LogOutSuccess,RegLogSucces,CountCartnotif,Categorylistload} from './../redux/actions'
 
 // import Axios from 'axios'
 // import { ApiURL } from '../supports/apiurl';
@@ -38,25 +38,12 @@ class Header extends React.Component {
     };
   }
   componentDidMount(){
-    // Axios.get(ApiURL+'/cart/getcountcart/'+this.props.LogReg.id)
-    // .then((res)=>{
-    //     console.log(res.data)
-    //     this.setState({countcart:res.data.jumlahcart})
-    // }).catch((err)=>{
-    //   console.log(err)
-    // })
     this.props.CountCartnotif(this.props.LogReg.id)
-    
+    this.props.Categorylistload()
   }
-  // componentDidUpdate(){
-  //   Axios.get(ApiURL+'/cart/getcountcart/'+this.props.LogReg.id)
-  //   .then((res)=>{
-  //       console.log(res.data)
-  //       this.setState({countcart:res.data.jumlahcart})
-  //   }).catch((err)=>{
-  //     console.log(err)
-  //   })
-  // }
+  componentDidUpdate(){
+    this.props.CountCartnotif(this.props.LogReg.id)    
+  }
 
   toggle() {
     this.setState({
@@ -83,11 +70,19 @@ class Header extends React.Component {
   }
   onlogout=()=>{
     localStorage.removeItem('terserah')
-    localStorage.removeItem('login')
+    localStorage.removeItem('token')
     this.props.LogOutSuccess()
     console.log(this.props.LogReg)
   }
-  
+  renderCatProdlist=()=>{
+    if(this.props.Categorylist.length!==0){
+      return this.props.Categorylist.map((item,index)=>{
+        return (
+          <option value={item.id} key={index}>{item.namacategory}</option>
+        )
+      })
+    }
+  }
   render() {
     return (
       <div className={this.props.changeHead?'bg-transparent navbar-posisi':' bg-white navbar-posisi'} onScroll={this.bgnav}>
@@ -145,16 +140,9 @@ class Header extends React.Component {
               <div className='bg-transparent'>
                 <select ref='category' className={this.props.changeHead?' header-category header-category-color':'header-category1 header-category-color1 '} onChange={()=>this.setState({changeCat:this.refs.category.value})} >
                   <optgroup label='Kategori' className='text-primary'>
+                    <option value="" disabled selected hidden>Pilih Kategori</option>
                     <option value='0' >Semua Produk</option>
-                    <option value="1" >Karbo/Biji</option>
-                    <option value="2" >Seafood</option>
-                    <option value="3" >Tambak</option>
-                    <option value="4" >Daging</option>
-                    <option value="5" >Unggas</option>
-                    <option value="6" >Sayur-mayur</option>
-                    <option value="7" >Buah</option>
-                    <option value="8" >Ikan Air tawar</option>
-                    <option value="9" >Umbi-umbian</option>
+                    {this.renderCatProdlist()}
                   </optgroup>
                 </select>
               </div>
@@ -200,7 +188,7 @@ class Header extends React.Component {
                             :
                             null
                           }
-                          {this.props.LogReg.statusver==='Unverified'?
+                          {this.props.LogReg.statusver==='unverified'?
                         <Link to='/resendverif'>
                           <DropdownItem>
                             <span style={{color:'red'}}> belum verified</span>
@@ -217,7 +205,7 @@ class Header extends React.Component {
                      
                           <DropdownItem divider />
                           <DropdownItem onClick={this.onlogout}>
-                            <Link to='/'>Logout</Link>
+                            <a href="http://localhost:3000/">LogOut</a>
                           </DropdownItem>
                         </DropdownMenu>
                       </UncontrolledDropdown>
@@ -238,7 +226,8 @@ const MapStateToProps=(state)=>{
   return{
       changeHead:state.HeaderBg,
       LogReg:state.LogReg,
-      jumlahcartnotif:state.Countcartnotif
+      jumlahcartnotif:state.Countcartnotif,
+      Categorylist:state.Categorylist
   }
 }
-export default connect(MapStateToProps,{ChangeHeader,LogOutSuccess,RegLogSucces,CountCartnotif}) (Header);
+export default connect(MapStateToProps,{ChangeHeader,LogOutSuccess,RegLogSucces,CountCartnotif,Categorylistload}) (Header);

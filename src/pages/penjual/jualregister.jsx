@@ -78,6 +78,7 @@ class JualReg extends React.Component {
                                         <InputGroup className='mt-3 mb-5'>
                                             <InputGroupAddon><FontAwesomeIcon icon={faStoreAlt} className='mr-2 mt-2 text-primary'/></InputGroupAddon>
                                             <Input type='select' ref='category' innerRef='category'>
+                                                <option value="" disabled selected hidden>Pilih Kategori</option>
                                                 <option value="1">Pertanian</option>
                                                 <option value="2">Peternakan</option>
                                                 <option value="3">Perikanan</option>

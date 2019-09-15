@@ -15,7 +15,8 @@ class Search extends Component {
         paginationitem:0,
         currentpage:0,
         keywordsearch:'',
-        Categorysearch:'Semua Product'
+        Categorysearch:'Semua Product',
+        cat:0
     }
     componentDidMount(){
         this.props.ChangeHeader(false) 
@@ -32,10 +33,10 @@ class Search extends Component {
         .then((res)=>{
             console.log(res.data)
             if(res.data.pagination.length===0){
-                this.setState({listallproduct:res.data.pagination,paginationitem:res.data.page.jumlah,currentpage:parseInt(query.page),Categorysearch:''})
+                this.setState({listallproduct:res.data.pagination,paginationitem:res.data.page.jumlah,currentpage:parseInt(query.page),Categorysearch:'',cat:query.cat})
             }else{
                 if(query.cat!=='0'){
-                    this.setState({listallproduct:res.data.pagination,paginationitem:res.data.page.jumlah,currentpage:parseInt(query.page),Categorysearch:res.data.pagination[0].namacategory})
+                    this.setState({listallproduct:res.data.pagination,paginationitem:res.data.page.jumlah,currentpage:parseInt(query.page),Categorysearch:res.data.pagination[0].namacategory,cat:query.cat})
                 }else{
                     this.setState({listallproduct:res.data.pagination,paginationitem:res.data.page.jumlah,currentpage:parseInt(query.page)})
                 }
@@ -90,7 +91,7 @@ class Search extends Component {
                     jsx.push(
                         <div>
                             <PaginationItem active={this.state.currentpage===i-1?true:false}>
-                                <PaginationLink href={`http://localhost:3000/search?prod=${query.prod}&page=${i-1}`}>
+                                <PaginationLink href={`http://localhost:3000/search?prod=${query.prod}&page=${i-1}&cat=${this.state.cat}`}>
                                     {i-1}
                                 </PaginationLink>
                             </PaginationItem>
@@ -99,7 +100,7 @@ class Search extends Component {
                 }else{
                     jsx.push(<div>
                              <PaginationItem active={this.state.currentpage===i?true:false}>
-                                 <PaginationLink href={`http://localhost:3000/search?prod=${query.prod}&page=${i}`}>
+                                 <PaginationLink href={`http://localhost:3000/search?prod=${query.prod}&page=${i}&cat=${this.state.cat}`}>
                                      {i}
                                  </PaginationLink>
                              </PaginationItem>
@@ -122,30 +123,54 @@ class Search extends Component {
             return <Loading/>
         }
         if(this.state.listallproduct.length===0){
-            return <h1 className='home'>product tidak ada</h1>
+            return (
+            <div>
+                <h1 className='home'>product tidak ada</h1>
+                <div className='d-flex justify-content-center'style={{marginTop:'33%'}}>
+                    <Pagination aria-label="Page navigation example">
+                        <PaginationItem disabled={this.state.currentpage===1?true:false}>
+                            <PaginationLink first href={`http://localhost:3000/search?prod=${query.prod}&page=${1}&cat=${this.state.cat}`} />
+                        </PaginationItem>
+                        <PaginationItem disabled={this.state.currentpage===1?true:false} >
+                            <PaginationLink previous href={`http://localhost:3000/search?prod=${query.prod}&page=${parseInt(query.page)-1}&cat=${this.state.cat}`} />
+                        </PaginationItem>
+                            {this.renderPagination()}
+                        <PaginationItem disabled={this.state.currentpage===akhir?true:false}>
+                            <PaginationLink  next href={`http://localhost:3000/search?prod=${query.prod}&page=${parseInt(query.page)+1}&cat=${this.state.cat}`} />
+                        </PaginationItem>
+                        <PaginationItem disabled={this.state.currentpage===akhir?true:false}>
+                            <PaginationLink last href={`http://localhost:3000/search?prod=${query.prod}&page=${akhir}&cat=${this.state.cat}`} />
+                        </PaginationItem>
+                    </Pagination>
+                </div>
+        </div>
+            
+            
+            )
         }
         return (
             <div className='home kontainer'>
-                <h5>Keyword :"{query.prod===''?'tidak ada keyword':query.prod}" </h5>
-                <h5>Category :"{this.state.Categorysearch}" </h5>
+                <div className="d-flex">
+                    <h5 className='mr-3'>Keyword :"{query.prod===''?'tidak ada keyword':query.prod}" </h5>
+                    <h5>Category :"{this.state.Categorysearch}" </h5>
+                </div>
                 <div className="row">
                     {this.renderAllProduct()}
-
                 </div>
                 <div className='d-flex justify-content-center mt-5'>
                     <Pagination aria-label="Page navigation example">
                         <PaginationItem disabled={this.state.currentpage===1?true:false}>
-                            <PaginationLink first href={`http://localhost:3000/search?prod=${query.prod}&page=${1}`} />
+                            <PaginationLink first href={`http://localhost:3000/search?prod=${query.prod}&page=${1}&cat=${this.state.cat}`} />
                         </PaginationItem>
                         <PaginationItem disabled={this.state.currentpage===1?true:false} >
-                            <PaginationLink previous href={`http://localhost:3000/search?prod=${query.prod}&page=${parseInt(query.page)-1}`} />
+                            <PaginationLink previous href={`http://localhost:3000/search?prod=${query.prod}&page=${parseInt(query.page)-1}&cat=${this.state.cat}`} />
                         </PaginationItem>
                             {this.renderPagination()}
                         <PaginationItem disabled={this.state.currentpage===akhir?true:false}>
-                            <PaginationLink  next href={`http://localhost:3000/search?prod=${query.prod}&page=${parseInt(query.page)+1}`} />
+                            <PaginationLink  next href={`http://localhost:3000/search?prod=${query.prod}&page=${parseInt(query.page)+1}&cat=${this.state.cat}`} />
                         </PaginationItem>
                         <PaginationItem disabled={this.state.currentpage===akhir?true:false}>
-                            <PaginationLink last href={`http://localhost:3000/search?prod=${query.prod}&page=${akhir}`} />
+                            <PaginationLink last href={`http://localhost:3000/search?prod=${query.prod}&page=${akhir}&cat=${this.state.cat}`} />
                         </PaginationItem>
                     </Pagination>
                 </div>

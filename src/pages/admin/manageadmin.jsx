@@ -1,16 +1,20 @@
 import React from 'react';
-import {Nav,TabContent,TabPane,NavItem,NavLink,ModalHeader,ModalBody,ModalFooter,Modal,Table} from 'reactstrap'
+import {Nav,TabContent,TabPane,NavItem,NavLink,ModalHeader,ModalBody,ModalFooter,Modal,Table,Input} from 'reactstrap'
 import {connect} from 'react-redux'
 import {ChangeHeader} from './../../redux/actions'
 import classnames from 'classnames'
 import querystring from 'query-string'
 import Axios from 'axios'
 import Numeral from 'numeral'
-import { ApiURL } from '../../supports/apiurl';
+import { ApiURL } from '../../supports/apiurl'
 import Loading from './../../components/loading'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faEdit} from '@fortawesome/free-solid-svg-icons'
+
+// import Pagenotfound from '../Pagenotfound';
 class ManageAdmin extends React.Component {
     state = {
-        activeTab: '3',
+        activeTab: '4',
         confirmpaylist:null,
         imageurlselected:'',
         Modalimage:false,
@@ -19,7 +23,9 @@ class ManageAdmin extends React.Component {
         paymentid:0,
         paymentuserid:0,
         suksespaymodal:false,
-        suksesCancelpayment:false
+        suksesCancelpayment:false,
+        catProd:null,
+        catPen:null
       }
     componentDidMount(){
         this.props.ChangeHeader(false)
@@ -47,6 +53,13 @@ class ManageAdmin extends React.Component {
                 console.log(err)
             })
         }
+        Axios.get(ApiURL+'/admin/getAllcategoies')
+        .then((res)=>{
+            console.log(res.data)
+            this.setState({catPen:res.data.pen,catProd:res.data.prod})
+        }).catch((err)=>{
+            console.log(err)
+        })
     }
     toggle=(tab)=>{
         if (this.state.activeTab !== tab) {
@@ -79,6 +92,27 @@ class ManageAdmin extends React.Component {
             console.log(err)
         })
     }
+    onBtnAddCatpenClick=()=>{
+        Axios.post(ApiURL+'/admin/addCatPenCategory',{
+            nama:this.refs.PenKat.refs.PenKat.value
+        }).then((res)=>{
+            this.setState({catPen:res.data.pen,catProd:res.data.prod})
+        }).catch((err)=>{
+            console.log(err)
+        })
+    }
+    onBtnAddCatprodClick=()=>{
+        if(this.refs.PenKatsm.refs.PenKatsm.value!==''){
+            Axios.post(ApiURL+'/admin/addCatProdCategory',{
+                namacategory:this.refs.ProdKat.refs.ProdKat.value,
+                catpenjualid:this.refs.PenKatsm.refs.PenKatsm.value
+            }).then((res)=>{
+                this.setState({catPen:res.data.pen,catProd:res.data.prod})
+            }).catch((err)=>{
+                console.log(err)
+            })
+        }
+    }
     renderconfirmpaylist=()=>{
         if(querystring.parse(this.props.location.search).trans==='conmin'){
             return this.state.confirmpaylist.map((item,index)=>{
@@ -110,6 +144,44 @@ class ManageAdmin extends React.Component {
             })
         }
     }
+    renderCatpenlist=()=>{
+        if(this.state.catPen){
+            return this.state.catPen.map((item,index)=>{
+                return(
+                    <tr key={item.id}>
+                        <td>{index+1}</td>
+                        <td>{item.nama}</td>
+                        <td><button className='btn btn-primary'>Edit</button></td>
+                        <td><button className='btn btn-light'>Delete</button></td>
+                    </tr>
+                )
+            })
+        }
+    }
+    renderCatProdlist=()=>{
+        if(this.state.catProd){
+            return this.state.catProd.map((item,index)=>{
+                return(
+                <tr key={item.id}>
+                    <td>{index+1}</td>
+                    <td>{item.namacategory}</td>
+                    <td>{item.nama}</td>
+                    <td><button className='btn btn-primary'>Edit</button></td>
+                    <td><button className='btn btn-light'>Delete</button></td>
+                </tr> 
+                )
+            })
+        }
+    }
+    renderCatpensmalllist=()=>{
+        if(this.state.catPen){
+            return this.state.catPen.map((item,index)=>{
+                return(
+                    <option value={item.id} key={index}>{item.nama}</option>
+                )
+            })
+        }
+    }
     render() {
         this.props.ChangeHeader(false)
         if(this.state.confirmpaylist===null){
@@ -119,6 +191,15 @@ class ManageAdmin extends React.Component {
         <div>
             <div className="home">
             <Nav tabs>
+                <NavItem>
+                    <NavLink
+                    className={classnames('text-primary', 'tab-prod',{ active: this.state.activeTab === '3',
+                                'font-weight-bolder': this.state.activeTab === '3'})}
+                    onClick={() => { this.toggle('3'); }}
+                    >
+                    Manage transaksi
+                    </NavLink>
+                </NavItem>
                 <NavItem>
                     <NavLink
                     className={classnames('tab-prod','text-primary',{ active: this.state.activeTab === '1',
@@ -139,33 +220,90 @@ class ManageAdmin extends React.Component {
                 </NavItem>
                 <NavItem>
                     <NavLink
-                    className={classnames('text-primary', 'tab-prod',{ active: this.state.activeTab === '3',
-                                'font-weight-bolder': this.state.activeTab === '3'})}
-                    onClick={() => { this.toggle('3'); }}
+                    className={classnames('text-primary', 'tab-prod',{ active: this.state.activeTab === '4',
+                                'font-weight-bolder': this.state.activeTab === '4'})}
+                    onClick={() => { this.toggle('4'); }}
                     >
-                    Manage transaksi
+                    Manage Categories
                     </NavLink>
                 </NavItem>
             </Nav>
             <TabContent activeTab={this.state.activeTab}>
                 <TabPane tabId='1' className='px-3 py-1'>
-                    <div className="row">
-                        <div className="col-md-2 p-1">
-                            <div className='bg-primary text-white overflow-auto 'style={{height:'590px'}}>
-                                <div style={{height:'150',fontSize:'30px',fontWeight:"bolder",borderBottom:'0.5px solid white'}} className='p-4 mb-1'>
-                                    IKLAN
-                                </div>
-                                <div style={{height:'150',fontSize:'30px',fontWeight:"bolder",borderBottom:'0.5px solid white'}} className='p-4 mb-1'>
-                                    Jumbotron
-                                </div>
-                                <div style={{height:'150',fontSize:'30px',fontWeight:"bolder",borderBottom:'0.5px solid white'}} className='p-4 mb-1'>
-                                    about
+                    <div className="row " >
+                        <div className="col-md-6">
+                            <div className='mt-2'>
+                                <h4 className='text-primary font-weight-bolder'>Home Image</h4>
+                                <div className=''  style={{border:'2px solid lightgray',height:224,width:324}}>
+                                    <img alt='foto-toko' src={'http://localhost:2001/product/images/home-foto.jpg'} height='220px' width='320px'/>
+                                    <div onClick={()=>this.setState({editbgprofile:true})} className='pointer-add'>
+                                        <FontAwesomeIcon icon={faEdit} className='position-relative' style={{bottom:20,left:328}}/>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-10">
-                            <div className='bg-light overflow-auto'>
-
+                        <div className="col-md-6">
+                            <div className="mt-2">
+                                <h4 className='text-primary font-weight-bolde'>Main Text</h4>
+                                <div className=" mt-3 ">
+                                    <div className='p-1' style={{border:'2px solid grey',height:124,width:394}}>
+                                        dsadadadad
+                                    </div>
+                                    <div onClick={()=>this.setState({editabout:true})} className='pointer-add'>
+                                        <FontAwesomeIcon icon={faEdit} className='position-relative' style={{bottom:20,left:398}}/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="mt-2">
+                        <h4 className='text-primary font-weight-bolde'>Iklan</h4>
+                        <div className="mx-3 overflow-auto">
+                            <button className='btn btn-primary'>Add Iklan</button>
+                            <Table className='mt-2 ' striped hover>
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Iklan</th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td><img src="http://localhost:2001/product/images/home-foto.jpg" alt="" height='120px'/></td>
+                                        <td><button className='btn btn-primary'>Edit</button></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </Table>
+                        </div>
+                    </div>
+                    <div className="mt-2">
+                        <h4 className='text-primary font-weight-bolde'>Jumbotron</h4>
+                        <div className="row ">
+                            <div className="col-md-1 text-center p-0">
+                                1.
+                            </div>
+                            <div className="col-md-4 p-0">
+                                <div  style={{border:'2px solid lightgray',height:224,width:324}}>
+                                    <img alt='foto-toko' src={'http://localhost:2001/product/images/home-foto.jpg'} height='220px' width='320px'/>
+                                    <div onClick={()=>this.setState({editbgprofile:true})} className='pointer-add'>
+                                        <FontAwesomeIcon icon={faEdit} className='position-relative' style={{bottom:20,left:328}}/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-md-1 text-center p-0">
+                                2.
+                            </div>
+                            <div className="col-md-4  p-0">
+                                <div  style={{border:'2px solid lightgray',height:224,width:324}}>
+                                    <img alt='foto-toko' src={'http://localhost:2001/product/images/home-foto.jpg'} height='220px' width='320px'/>
+                                    <div onClick={()=>this.setState({editbgprofile:true})} className='pointer-add'>
+                                        <FontAwesomeIcon icon={faEdit} className='position-relative' style={{bottom:20,left:328}}/>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -199,8 +337,71 @@ class ManageAdmin extends React.Component {
                         </tbody>
                     </Table>
                 </TabPane>
+                <TabPane tabId='4' className='px-3 py-4'>
+                    <div className="mt-2">
+                        <h4 className='text-primary font-weight-bolde'>Penjual Kategori</h4>
+                        <div className="mx-5 overflow-auto">
+                            <Table className='mt-2 ' striped hover>
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Kategori</th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {this.renderCatpenlist()}
+                                    <tr>
+                                        <td></td>
+                                        <td><Input type='text' placeholder='Kategori' size='1' ref='PenKat' innerRef='PenKat'/></td>
+                                        <td><button className='btn btn-primary' onClick={this.onBtnAddCatpenClick}>Add Penjual Kategori</button></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </Table>
+                        </div>
+                    </div>
+                    <div className="mt-2">
+                        <h4 className='text-primary font-weight-bolde'>Produk Kategori</h4>
+                        <div className="mx-5 overflow-auto">
+                            <Table className='mt-2 ' striped hover>
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Kategori Produk</th>
+                                        <th>Kategori Penjual</th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {this.renderCatProdlist()}
+                                    <tr>
+                                        <td></td>
+                                        <td><Input type='text' placeholder='Kategori' size='1' ref='ProdKat' innerRef='ProdKat'/></td>
+                                        <td>                                                
+                                            <Input type='select' ref='PenKatsm' innerRef='PenKatsm'>
+                                                <option value="" disabled selected hidden>Pilih Penjual Kategori</option>
+                                                {this.renderCatpensmalllist()}
+                                            </Input>
+                                        </td>
+                                        <td><button className='btn btn-primary' onClick={this.onBtnAddCatprodClick}>Add Produk Kategori</button></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </Table>
+                        </div>
+                    </div>
+                </TabPane>
             </TabContent>
             </div>
+            {/* Modal Manage Categories */}
+            <Modal>
+
+            </Modal>
+            {/* Modal Manage Categories */}
+            {/* transaksi start */}
             <Modal isOpen={this.state.ModalCanceledpayment} centered toggle={()=>this.setState({ModalCanceledpayment:false})}>
                 <ModalHeader>
                     Pembatalan Pembayaran User (user id={this.state.paymentuserid})
@@ -252,6 +453,8 @@ class ManageAdmin extends React.Component {
                     <button className='btn btn-primary' onClick={()=>this.setState({suksespaymodal:false})}>OK</button>
                 </ModalFooter>
             </Modal>
+            {/* transaksi end */}
+
         </div>  
         );
     }

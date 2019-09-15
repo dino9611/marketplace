@@ -6,6 +6,7 @@ import {Table,Modal,ModalHeader,ModalBody,ModalFooter,CustomInput,Input} from 'r
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faPlusCircle} from '@fortawesome/free-solid-svg-icons'
 import { ApiURL } from '../../supports/apiurl';
+import PagenotFound from './../Pagenotfound'
 import Axios from 'axios'
 class Jualanku extends React.Component {
     state = {
@@ -171,7 +172,6 @@ class Jualanku extends React.Component {
                             </div>
                         </div>
                     </td>
-
                 </tr>
             )
         }
@@ -259,6 +259,9 @@ class Jualanku extends React.Component {
     }
     render() {
         this.props.ChangeHeader(false)
+        if(this.props.LogReg.penjualid===null){
+            return <PagenotFound/>
+        }
         if(this.state.listproduct===null){
             return <Loading/>
         } 
@@ -294,7 +297,10 @@ class Jualanku extends React.Component {
                     </Modal>
                     <div className='mb-2'>
                         <a href="http://localhost:3000/pentrans?stat=waitingproses">
-                            <button className='btn btn-primary'>Manage transaksi</button>
+                            <button className='btn btn-primary mr-2'>Manage transaksi</button>
+                        </a>
+                        <a href={"http://localhost:3000/detailtoko/"+this.props.LogReg.penjualid}>
+                            <button className='btn btn-primary'>Lihat Toko</button>
                         </a>
                     </div>
                     {this.state.listproduct.length===0?null:<button className='btn btn-light font-weight-bolder' onClick={()=>this.setState({Modal:true})}>Add product</button>}

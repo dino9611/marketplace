@@ -15,7 +15,6 @@
     outline: none;
     background: transparent;
     font-size: 30px !important;
-    
 }
 .iklan .slick-prev{
   left:10px !important;
@@ -132,7 +131,7 @@
   color: var(--primary-color) !important
 }
 .btnborder{
-  border: 1.5px solid white !important ;
+  border-left: 1px solid white !important ;
 }
 .icon-search{
   width: 5% !important;
