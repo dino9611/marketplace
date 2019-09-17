@@ -27,6 +27,7 @@ import Search from './pages/search'
 import Transaksipenjual from './pages/penjual/transaksipenjual';
 import Transaksiuser from './pages/user/transaksiuser';
 import PenjualSetting from './pages/penjual/penjualSetting'
+import userSetting from './pages/user/userSetting';
 
 
 class App extends React.Component {
@@ -46,6 +47,16 @@ class App extends React.Component {
           console.log(this.props.LogReg)
       })
       .catch((err)=>{
+        console.log(err)
+      })
+      Axios.put(ApiURL+'/transaksi/UpdateOvertime',{},{
+        params:{
+            userid:this.props.LogReg.id
+        }
+      })
+      .then((res)=>{
+          console.log(res.data)
+      }).catch((err)=>{
         console.log(err)
       })
     }else{
@@ -79,6 +90,7 @@ class App extends React.Component {
           <Route path='/pentrans' component={Transaksipenjual}/>
           <Route path='/transusers' component={Transaksiuser}/>
           <Route path='/penjualsetting' component={PenjualSetting}/>
+          <Route path='/userset' component={userSetting}/>
           <Route path='/*' component={Pagenotfound}/>
         </Switch>
     </div>  

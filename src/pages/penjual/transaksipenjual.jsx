@@ -125,6 +125,7 @@ class PenjualTransaksi extends Component {
                         <td>{item.quantity}</td>
                         <td>{item.userid}</td>
                         <td>{item.username}</td>
+                        <td>{item.alamat}</td>
                         <td><button className='btn btn-primary' onClick={()=>this.setState({ModalonSent:true,Prosesitemid:item.id,ProsesPaymentid:item.paymentid,Produkselected:item.nama,ProsesUserid:item.userid})}>Kirim Produk</button></td>
                         <td><button className='btn btn-light'>Batalkan Pengiriman</button></td>
                     </tr>
@@ -172,6 +173,7 @@ class PenjualTransaksi extends Component {
                             <th>Jumlah Pesanan</th>
                             <th>User Id</th>
                             <th>Username</th>
+                            {querystring.parse(this.props.location.search).stat==='waitingsent'?<th>Alamat Pengiriman</th>:null}
                             <th></th>
                             <th></th>
                         </tr>

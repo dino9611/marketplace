@@ -125,7 +125,7 @@ class PenjualSetting extends Component {
         })
         .then((res) => {
             console.log(res.data)
-            this.setState({ editabout:false,Sellersettingsdata:res.data })
+            this.setState({ editalamat:false,Sellersettingsdata:res.data })
         })
         .catch((err) =>{
             console.log(err)

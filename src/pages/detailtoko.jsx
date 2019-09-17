@@ -60,13 +60,13 @@ class DetailToko  extends React.Component {
                 <div className=" text-dark col-md-3 col-6 p-2" >
                     <Link to={'/detailprod/'+item.id} style={{textDecoration:'none'}}>
                         <div className="card bg-light" style={{height:'450px',fontSize:'18px'}}>
-                            <img src={`${ApiURL+item.image}`} alt={item.id} width='100%' height='275px'/>
-                            <div className='mt-1 font-weight-bolder px-3 text-dark'>
+                            <img src={`${ApiURL+item.image}`} alt={item.id} width='100%' height='225'/>
+                            <div className='mt-1 font-weight-bolder px-3 text-dark' style={{height:90}}>
                             {item.nama}/{item.satuanorder}
                             </div>
-                            <div className="row px-4  mt-5">
-                                <div className="col-3 p-1">
-                                    <div className="rounded-pill bg-primary  text-center text-white" style={{fontSize:'10px'}}>{item.namacategory}</div>
+                            <div className="row px-4 ">
+                                <div className="col-5 p-1">
+                                    <div className="rounded-pill bg-primary p-1  text-center text-white" style={{fontSize:'14px'}}>{item.namacategory}</div>
                                 </div>
                             </div>
                             <div className='mt-3 text-primary font-weight-bold px-3' style={{fontSize:'22px'}}>
@@ -90,8 +90,8 @@ class DetailToko  extends React.Component {
             <div className="home kontainer">
                 <div className="row ">
                     <div className="col-md-9 p-0 ">
-                        <div style={{ height:'450px'}} className='card bg-light ' >
-                            <img src={ApiURL+this.state.datatoko.imagebackground} alt="toko-profile-banner" height='200px'/>
+                        <div style={{ height:'500px'}} className='card bg-light ' >
+                            <img src={ApiURL+this.state.datatoko.imagebackground} alt="toko-profile-banner" width='100%' height='250px'/>
                             <div className="px-2 row">
                                 <div className='  col-2 pl-3 py-0 pr-0'>
                                     <div className="detail-profile ">

@@ -21,7 +21,7 @@ class History extends React.Component {
         modalupload:false,
         uploadid:0,
         suksespaymodal:false,
-        waktusekarang:null
+        waktusekarang:null,
     }
     componentDidMount(){
         this.props.ChangeHeader(false) 
@@ -39,13 +39,10 @@ class History extends React.Component {
             .then((res)=>{
                 console.log(res.data)
                 if(res.data.length!==0){
-                    var d=new Date(res.data[0].tglexp).getTime()
-                    console.log(d)
-                    console.log(Date.now())
                     window.setInterval(()=>this.setState({waktusekarang:Date.now()}),1000)
                     
                 }
-                this.setState({waitingpaymentlist:res.data,})
+                this.setState({waitingpaymentlist:res.data,tampilwaktu:true})
             })
             .catch((err)=>{
                 console.log(err)
@@ -166,10 +163,10 @@ class History extends React.Component {
         if(this.state.waitingpaymentlist.length===0){
             return(
             <tr>
-                <td colSpan='5' rowSpan='10'>
+                <td colSpan='6' rowSpan='10'>
                     <div style={{height:'400px',fontSize:'36px'}}className='justify-content-center d-flex align-items-center'>
                         <div className='pointer-add'>
-                            Tidak ada transaksi
+                            Tidak Ada Transaksi
                         </div>
                     </div>
                 </td>
@@ -184,8 +181,13 @@ class History extends React.Component {
                     <td>{'Rp.'+Numeral(item.totalharga).format('0,0')}</td>
                     {/* <td>{item.status}</td> */}
                     <td><button className='btn btn-primary' onClick={()=>this.onClickDetails(item.id)}>Details</button></td>
-                    <td><button className='btn btn-light'onClick={()=>this.setState({uploadid:item.id,modalupload:true})} >Upload Payment</button></td>
-                    <td>{new Date(item.tglexp).getTime()-this.state.waktusekarang<=1?'Waktu habis':Numeral(new Date(item.tglexp).getTime()-this.state.waktusekarang).divide(1000).format('00:00:00')}</td>
+                    <td><button className='btn btn-light'onClick={()=>this.setState({uploadid:item.id,modalupload:true})} disabled={new Date(item.tglexp).getTime()-this.state.waktusekarang<=1?true:false} >Upload Payment</button></td>
+                    {
+                        this.state.waktusekarang?
+                        <td>{new Date(item.tglexp).getTime()-this.state.waktusekarang<=1?'Waktu habis':Numeral(new Date(item.tglexp).getTime()-this.state.waktusekarang).divide(1000).format('00:00:00')}</td>
+                        :
+                        <td></td>
+                    }
                 </tr>
             )
         })
@@ -224,7 +226,7 @@ class History extends React.Component {
                     <a href="http://localhost:3000/history?stat=waiting">
                         <button className='mr-2 btn btn-primary'disabled={querystring.parse(this.props.location.search).stat==='waiting'||'waitcon'||'konfiramsi'?true:false}>Data Pembayaran</button>
                     </a>
-                    <a href='http://localhost:3000/transusers?stat=proses'>
+                    <a href='http://localhost:3000/transusers?stat=waiting'>
                         <button className='mr-2 btn btn-primary'>Data Pesanan</button>
                     </a>
                 </div>

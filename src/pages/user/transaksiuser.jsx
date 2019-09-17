@@ -75,6 +75,19 @@ class TransaksiUser extends React.Component {
     }
     renderTransaksilist=()=>{
         if(querystring.parse(this.props.location.search).stat==='waiting'){
+            if(this.state.TransaksiList.length===0){
+                return(
+                <tr>
+                    <td colSpan='6' rowSpan='10'>
+                        <div style={{height:'400px',fontSize:'36px'}}className='justify-content-center d-flex align-items-center'>
+                            <div className='pointer-add'>
+                                Data Belum Ada
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                )
+            }
             return this.state.TransaksiList.map((item,index)=>{
                 return(
                 <tr key={item.id}>
@@ -89,6 +102,19 @@ class TransaksiUser extends React.Component {
                 )
             })
         }else if(querystring.parse(this.props.location.search).stat==='proses'){
+            if(this.state.TransaksiList.length===0){
+                return(
+                <tr>
+                    <td colSpan='6' rowSpan='10'>
+                        <div style={{height:'400px',fontSize:'36px'}}className='justify-content-center d-flex align-items-center'>
+                            <div className='pointer-add'>
+                                Data Belum Ada
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                )
+            }
             return this.state.TransaksiList.map((item,index)=>{
                 return(
                 <tr key={item.id}>
@@ -103,6 +129,19 @@ class TransaksiUser extends React.Component {
                 )
             })
         }else if(querystring.parse(this.props.location.search).stat==='dikirim'){
+            if(this.state.TransaksiList.length===0){
+                return(
+                <tr>
+                    <td colSpan='6' rowSpan='10'>
+                        <div style={{height:'400px',fontSize:'36px'}}className='justify-content-center d-flex align-items-center'>
+                            <div className='pointer-add'>
+                                Data belum ada
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                )
+            }
             return this.state.TransaksiList.map((item,index)=>{
                 return(
                 <tr key={item.id}>
@@ -117,6 +156,19 @@ class TransaksiUser extends React.Component {
                 )
             })
         }else if(querystring.parse(this.props.location.search).stat==='finish'){
+            if(this.state.TransaksiList.length===0){
+                return(
+                <tr>
+                    <td colSpan='6' rowSpan='10'>
+                        <div style={{height:'400px',fontSize:'36px'}}className='justify-content-center d-flex align-items-center'>
+                            <div className='pointer-add'>
+                                Tidak ada transaksi
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                )
+            }
             return this.state.TransaksiList.map((item,index)=>{
                 return(
                 <tr key={item.id}>

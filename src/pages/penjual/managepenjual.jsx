@@ -8,6 +8,8 @@ import {faPlusCircle} from '@fortawesome/free-solid-svg-icons'
 import { ApiURL } from '../../supports/apiurl';
 import PagenotFound from './../Pagenotfound'
 import Axios from 'axios'
+import Numeral from 'numeral'
+
 class Jualanku extends React.Component {
     state = {
         Modal:false,
@@ -181,7 +183,7 @@ class Jualanku extends React.Component {
                     <td >{index+1}</td>
                     <td>{item.nama}</td>
                     <td><img src={ApiURL+item.image} alt="" width='200'/></td>
-                    <td>{item.harga}</td>
+                    <td>{'Rp.'+Numeral(item.harga).format('0,0')}</td>
                     <td>{item.stok}</td>
                     <td>{item.namacategory}</td>
                     <td>{item.satuanorder}</td>

@@ -38,12 +38,13 @@ class Header extends React.Component {
     };
   }
   componentDidMount(){
-    this.props.CountCartnotif(this.props.LogReg.id)
-    this.props.Categorylistload()
+
+      this.props.CountCartnotif(this.props.LogReg.id)
+      this.props.Categorylistload()
   }
-  componentDidUpdate(){
-    this.props.CountCartnotif(this.props.LogReg.id)    
-  }
+  // componentDidUpdate(){
+  //   this.props.CountCartnotif(this.props.LogReg.id)    
+  // }
 
   toggle() {
     this.setState({
@@ -139,11 +140,11 @@ class Header extends React.Component {
               </div>
               <div className='bg-transparent'>
                 <select ref='category' className={this.props.changeHead?' header-category header-category-color':'header-category1 header-category-color1 '} onChange={()=>this.setState({changeCat:this.refs.category.value})} >
-                  <optgroup label='Kategori' className='text-primary'>
+                  
                     <option value="" disabled selected hidden>Pilih Kategori</option>
                     <option value='0' >Semua Produk</option>
                     {this.renderCatProdlist()}
-                  </optgroup>
+                  
                 </select>
               </div>
           {this.props.LogReg.username===''?null:<NavbarToggler onClick={this.toggle} className={this.props.changeHead?'ml-2 ':'ml-2 bg-primary'} ></NavbarToggler>}
@@ -155,7 +156,7 @@ class Header extends React.Component {
                     </Link>
                   </NavItem>
                   <NavItem>
-                    <Link to='login'>
+                    <Link to='/login'>
                       <button className={this.props.changeHead?'btn mt-1 btn btn-store border-white text-white' :'mt-1 btn btn-primary'} style={{fontSize:'12px'}}>Sign In</button>
                     </Link>
                   </NavItem>
@@ -188,6 +189,9 @@ class Header extends React.Component {
                             :
                             null
                           }
+                            <DropdownItem>
+                              <Link to={'/userset'}>Users Settings</Link>
+                            </DropdownItem>
                           {this.props.LogReg.statusver==='unverified'?
                         <Link to='/resendverif'>
                           <DropdownItem>

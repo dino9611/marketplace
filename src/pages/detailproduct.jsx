@@ -18,7 +18,10 @@ class DetailProd extends React.Component {
         jumlahorder:1,
         proddata:null,
         loginfo:false,
-        penjualsama:false
+        penjualsama:false,
+        modalinfo:false,
+        infoisi:'',
+        isialamat:false
       }
     componentDidMount(){
         this.props.ChangeHeader(false)
@@ -34,6 +37,7 @@ class DetailProd extends React.Component {
                     // console.log(this.props.changeHead)
                 }
             })
+
             this.setState({proddata:res.data})
         }).catch((err)=>{
             console.log(err)
@@ -58,7 +62,12 @@ class DetailProd extends React.Component {
         }   
     }
     onBtnAddToCart=()=>{
-        if(this.state.proddata.penjualid===this.props.LogReg.penjualid){
+        if(this.props.LogReg.username===''){
+            this.setState({modalinfo:true,infoisi:'Anda harus Login dahulu'})
+        }else if(this.props.LogReg.alamat===null){
+            this.setState({modalinfo:true,infoisi:'Anda harus Lengkapi data dahulu',isialamat:true})
+        }
+        else if(this.state.proddata.penjualid===this.props.LogReg.penjualid){
             this.setState({loginfo:true,penjualsama:true})
         }else{
             const token=localStorage.getItem('token')
@@ -93,11 +102,33 @@ class DetailProd extends React.Component {
         }
         return (
             <div>
+                <Modal isOpen={this.state.modalinfo} toggle={()=>this.setState({modalinfo:false,infoisi:false,isialamat:false})} className='text-primary font-weight-bolder' centered>
+                    {/* <ModalHeader className=''>
+                        <div className='btn btn-danger rounded-circle text-center flex-end' onClick={()=>this.setState({modalinfo:false})}>X</div>
+                    </ModalHeader> */}
+                    <ModalBody style={{height:'100px',alignSelf:'center',justifySelf:'center'}}>
+                        {this.state.infoisi}
+                    </ModalBody>
+                    <ModalFooter className="pt-2">
+                        {this.state.isialamat?
+                            <Link to='/userset'>
+                                <input type='button' value='User Settings'className='btn btn-primary rounded-pill' style={{width:'150px'}} onClick={()=>this.setState({modalinfo:false,infoisi:false,isialamat:false})} />
+                            </Link>
+                            :
+                            
+                            <Link to='/login'>
+                                <input type='button' value='Login'className='btn btn-primary rounded-pill' style={{width:'100px'}} onClick={()=>this.setState({modalinfo:false,infoisi:false,isialamat:false})} />
+                            </Link>
+                            
+                        }
+                        <input type='button' value='Cancel'className='btn btn-primary rounded-pill' style={{width:'100px'}} onClick={()=>this.setState({modalinfo:false,infoisi:false,isialamat:false})} />
+                    </ModalFooter>
+                </Modal>
                 <Modal isOpen={this.state.loginfo} toggle={()=>this.setState({loginfo:false,penjualsama:false})} className='text-primary font-weight-bolder' centered>
                     {/* <ModalHeader className=''>
                         <div className='btn btn-danger rounded-circle text-center flex-end' onClick={()=>this.setState({loginfo:false})}>X</div>
                     </ModalHeader> */}
-                    <ModalBody style={{height:'70px',alignSelf:'center',justifySelf:'center'}}>
+                    <ModalBody style={{height:'100px',alignSelf:'center',justifySelf:'center'}}>
                         {this.state.penjualsama?'Anda tidak bisa membeli barang anda sendiri':'Product Berhasil masuk ke Cart'}
                     </ModalBody>
                     <ModalFooter className="pt-2">
@@ -122,7 +153,7 @@ class DetailProd extends React.Component {
                                             <div className='mb-4 pt-2'>Stock</div>
                                         </div>
                                         <div className="col-9 px-0 py-0" style={{fontSize:'15px'}}>
-                                            <div className='mb-4'>{'Rp.'+Numeral(this.state.proddata.harga).format('0,0.00')} </div>
+                                            <div className='mb-4'>{'Rp.'+Numeral(this.state.proddata.harga).format('0,0')} </div>
                                             <div className='mb-4 '>
                                                 {this.state.jumlahorder===1?
                                                 <button className=' btn  btn-primary font-weight-bold py-0'  disabled  style={{fontSize:'12px'}}>-</button>:
@@ -147,7 +178,7 @@ class DetailProd extends React.Component {
                                     <center>
                                         <Link to={'/detailtoko/'+this.state.proddata.penjualid} style={{textDecoration:'none'}}>
                                             
-                                            <img  src="https://ecs7.tokopedia.net/img/cache/700/product-1/2017/4/10/17182546/17182546_3ba76881-816b-4811-a0e4-56774f14239f_2048_1365.jpg" alt="" height='60px' width='60px'/>
+                                            <img  src={ApiURL+this.state.proddata.imageprofile} alt="" height='60px' width='60px'/>
                                             <div className='p-1 text-dark' >{this.state.proddata.namatoko}</div>
                                         </Link>
                                     </center>

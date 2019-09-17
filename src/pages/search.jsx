@@ -54,16 +54,16 @@ class Search extends Component {
                     <Link to={'/detailprod/'+item.id} style={{textDecoration:'none'}} key={item.id}>
                         <div className="card bg-light" style={{height:'300px',fontSize:'17px'}}>
                             <img src={`${ApiURL+item.image}`} alt={item.id} height='150px' width='100%'/>
-                            <div className='mt-1 font-weight-bolder px-3 text-dark'>
+                            <div className='mt-1 font-weight-bolder px-3 text-dark' style={{height:70,fontSize:14}}>
                                 {item.nama}/{item.satuanorder}
                             </div>
-                            <div className="row px-4  mt-5">
+                            <div className="row px-4 ">
                                 <div className="col-4 p-1">
                                     <div className="rounded-pill py-1 bg-primary  text-center text-white" style={{fontSize:'8px'}}>{item.namacategory}</div>
                                 </div>
                             </div>
                             <div className='mt-1 text-primary font-weight-bold px-3' style={{fontSize:'16px'}}>
-                                {'Rp.'+Numeral(item.harga).format('0,0.00')}    
+                                {'Rp.'+Numeral(item.harga).format('0,0')}    
                             </div> 
                         </div>
                     </Link>
@@ -73,7 +73,9 @@ class Search extends Component {
     }
     renderPagination=()=>{
         var query=querystring.parse(this.props.location.search)
-        var akhir=Math.ceil(this.state.paginationitem/2)//dibagi 2 karena dicoba 2 item perpage
+        var akhir=Math.ceil(this.state.paginationitem/12)
+        console.log(akhir)
+        //dibagi 2 karena dicoba 2 item perpage
         var jsx=[]
         if(akhir===1){
             jsx.push(
@@ -117,7 +119,7 @@ class Search extends Component {
         this.props.ChangeHeader(false) 
         var query=querystring.parse(this.props.location.search)
         console.log(this.state.paginationitem)
-        var akhir=Math.ceil(this.state.paginationitem/2)//bagi 2 karena tiap page 2 jangan lupa diganti kalo udah banyak
+        var akhir=Math.ceil(this.state.paginationitem/12)//bagi 2 karena tiap page 2 jangan lupa diganti kalo udah banyak
         console.log(akhir)
         if(this.state.listallproduct===null){
             return <Loading/>
@@ -125,8 +127,12 @@ class Search extends Component {
         if(this.state.listallproduct.length===0){
             return (
             <div>
-                <h1 className='home'>product tidak ada</h1>
-                <div className='d-flex justify-content-center'style={{marginTop:'33%'}}>
+                <div style={{height:650}} >
+                    <div className='d-flex home justify-content-center align-items-center'>
+                        <h1 className='' style={{marginTop:250}}>Product Tidak Ada</h1>
+                    </div>
+                </div>
+                {/* <div className='d-flex justify-content-center'>
                     <Pagination aria-label="Page navigation example">
                         <PaginationItem disabled={this.state.currentpage===1?true:false}>
                             <PaginationLink first href={`http://localhost:3000/search?prod=${query.prod}&page=${1}&cat=${this.state.cat}`} />
@@ -142,7 +148,7 @@ class Search extends Component {
                             <PaginationLink last href={`http://localhost:3000/search?prod=${query.prod}&page=${akhir}&cat=${this.state.cat}`} />
                         </PaginationItem>
                     </Pagination>
-                </div>
+                </div> */}
         </div>
             
             
@@ -154,10 +160,10 @@ class Search extends Component {
                     <h5 className='mr-3'>Keyword :"{query.prod===''?'tidak ada keyword':query.prod}" </h5>
                     <h5>Category :"{this.state.Categorysearch}" </h5>
                 </div>
-                <div className="row">
+                <div className="row" style={{marginBottom:'30'}}>
                     {this.renderAllProduct()}
                 </div>
-                <div className='d-flex justify-content-center mt-5'>
+                <div className='d-flex justify-content-center' style={{marginTop:15}}>
                     <Pagination aria-label="Page navigation example">
                         <PaginationItem disabled={this.state.currentpage===1?true:false}>
                             <PaginationLink first href={`http://localhost:3000/search?prod=${query.prod}&page=${1}&cat=${this.state.cat}`} />

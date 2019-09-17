@@ -34,15 +34,7 @@ class JualReg extends React.Component {
         .then((res)=>{
             console.log(res.data[0])
             this.props.RegLogSucces(res.data[0])
-            // var penjualid=res.data[0].id
-            // Axios.put(ApiURL+'/Regjual/'+id,{penjualid})
-            // .then((res)=>{
-            //     this.props.RegLogSucces(res.data[0])
-            // })
-            // .catch((err)=>{
-            //     console.log(err)
-            // })
-            
+    
         })
         .catch((err)=>{
             console.log(err)

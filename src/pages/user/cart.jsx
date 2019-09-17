@@ -101,7 +101,20 @@ class Cart extends React.Component {
     }
     rendercartlist=()=>{
         if(this.state.cartlist.length===0){
-            return(<div>tidak ada barang di cart silahkan belanja</div>)
+            return(
+            <tr>
+                <td colSpan='7' rowSpan='15'>
+                    <div style={{height:'590px',fontSize:'36px'}}className='justify-content-center d-flex align-items-center'>
+                        <div className='pointer-add'>
+                            <center>
+                                Cart kosong Silahkan belanja <br/>
+                                Cari Produk yang anda inginkan dengan ketik di section search
+                            </center> 
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            )
         }
         return this.state.cartlist.map((item,index)=>{
             return(
@@ -195,7 +208,7 @@ class Cart extends React.Component {
                     </tbody>
                 </Table>
                 <div className="d-flex justify-content-end mr-5">
-                    <button className='btn btn-primary' onClick={()=>this.setState({checkoutmodal:true})}>Checkout all</button>
+                    <button className='btn btn-primary' disabled={this.state.cartlist.length===0||null?true:false} onClick={()=>this.setState({checkoutmodal:true})}>Checkout all</button>
                 </div>
                 <Modal centered isOpen={this.state.deletemodal} toggle={()=>this.setState({deletemodal:false,modaldeleteindex:-1})}>
                         {this.rendermodaldelete()}

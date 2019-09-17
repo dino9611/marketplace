@@ -15,9 +15,14 @@ import { ApiURL } from '../supports/apiurl';
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
+import Loading from '../components/loading';
+
 class Home extends Component {
     state = {
-        listallproduct:[]
+        listallproduct:[],
+        Homeimage:null,
+        Jumbotron:null,
+        iklan:null,
       }
     componentDidMount(){
         this.props.ChangeHeader(true)
@@ -25,6 +30,12 @@ class Home extends Component {
         Axios.get(`${ApiURL}/product/getallproducthome`)
         .then((res)=>{
             this.setState({listallproduct:res.data})
+        }).catch((err)=>{
+            console.log(err)
+        })
+        Axios.get(ApiURL+'/admin/getHomedata')
+        .then((res)=>{
+            this.setState({Homeimage:res.data.home[0],Jumbotron:res.data.jumbotron,iklan:res.data.iklan})
         }).catch((err)=>{
             console.log(err)
         })
@@ -41,24 +52,35 @@ class Home extends Component {
             return(
                 <div className=" text-dark p-1" key={item.id}>
                     <Link to={'/detailprod/'+item.id} style={{textDecoration:'none'}}>
-                        <div className="card bg-light" style={{height:'300px',fontSize:'17px'}}>
+                        <div className="card bg-light" style={{height:'320px',fontSize:'17px'}}>
                             <img src={`${ApiURL+item.image}`} alt={item.id} height='150px' width='100%'/>
-                            <div className='mt-1 font-weight-bolder px-3 text-dark'>
+                            <div className='mt-1 font-weight-bolder px-3 text-dark' style={{height:80,fontSize:16}}>
                                 {item.nama}/{item.satuanorder}
                             </div>
-                            <div className="row px-4  mt-5">
-                                <div className="col-4 p-1">
-                                    <div className="rounded-pill py-1 bg-primary  text-center text-white" style={{fontSize:'8px'}}>{item.namacategory}</div>
+                            <div className="row px-4 ">
+                                <div className="col-6 p-1">
+                                    <div className="rounded-pill py-1 bg-primary  text-center text-white" style={{fontSize:'10px'}}>{item.namacategory}</div>
                                 </div>
                             </div>
                             <div className='mt-1 text-primary font-weight-bold px-3' style={{fontSize:'16px'}}>
-                                {'Rp.'+Numeral(item.harga).format('0,0.00')}    
+                                {'Rp.'+Numeral(item.harga).format('0,0')}    
                             </div> 
                         </div>
                     </Link>
                 </div>
             )
         })
+    }
+    renderIklanlist=()=>{
+        if(this.state.iklan){
+            return this.state.iklan.map((item,index)=>{
+                return(
+                <div style={{width:'100%',height:'300px'}} >
+                    <img src={ApiURL+item.iklanimage} alt="1" width='100%' height='300px' />
+                </div>
+                )
+            })
+        }
     }
     render(){
         const settings = {
@@ -98,12 +120,14 @@ class Home extends Component {
                 }
               ]
           };
+        if(this.state.Homeimage===null){
+            return <Loading/>
+        }
         return (
             <div className=''>
-
                 <Fade >
                     <div className='' >
-                        <img src="http://localhost:2001/product/images/home-foto.jpg" alt="gambar home" width='100%' height='740px'/>
+                        <img src={ApiURL+this.state.Homeimage.homeimage} alt="gambar home" width='100%' height='740px'/>
                         <div className='home-hitam d-flex justify-content-center align-items-center'>
                             <div className='home-caption d-flex justify-content-center align-items-center text-center text-white'>
                                     Marketplace product pertanian terkece Se-Konohagakure
@@ -111,23 +135,24 @@ class Home extends Component {
                         </div>
                     </div>
                     <div className='kontainer mt-2 mb-0'>
-                    
                         <div className='row'>
                             <div className='col-md-6 order-md-1 order-2 p-5 bg-primary text-white' style={{height:'300px'}}>
-                                <h1>ini judul</h1>
+                                <h3 className='mt-3'>{this.state.Homeimage.maintext}</h3>
                             </div>
                             <div className='col-md-6 order-md-2  order-1 p-0 m-0'>
-                                <Iklan/>
+                                <Iklan>
+                                    {this.renderIklanlist()}
+                                </Iklan>
                             </div>
                         </div>
                     </div>
-                    <div className="kontainer ">
+                    <div style={{marginLeft:'5.5%',marginRight:"5.5%"}}>
                         <Slider {...settings}>
                             {this.renderallproduct()}
                         </Slider>  
                     </div>
-                    <div className='mr-3'>
-                        <Jumbo/>
+                    <div className='mr-3 mt-4'>
+                        <Jumbo jumbo1={ApiURL+this.state.Jumbotron[0].jumbotronimage} jumbo2={ApiURL+this.state.Jumbotron[1].jumbotronimage}/>
                     </div>
                 </Fade>
                 <div className=''>

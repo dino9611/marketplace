@@ -7,10 +7,10 @@ class Jumbotron extends React.Component {
         return (
             <div className="row">
                 <div className=" col-md-7 p-0">
-                   <img src="https://blog.marginmedia.com.au/hubfs/shutterstock_1064618435%20%281%29.jpg" alt="" width='100%' height='350px'/>
+                   <img src={this.props.jumbo1} alt="gambar jumbo1" width='100%' height='350px'/>
                 </div>
                 <div className=" col-md-5 p-0">
-                    <img src="https://blog.marginmedia.com.au/hubfs/shutterstock_1064618435%20%281%29.jpg" alt="" width='100%' height='350px'/>
+                    <img src={this.props.jumbo2} alt="jumbo2" width='100%' height='350px'/>
                 </div>
             </div>
           );
