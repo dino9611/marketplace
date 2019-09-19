@@ -49,16 +49,16 @@ class App extends React.Component {
       .catch((err)=>{
         console.log(err)
       })
-      Axios.put(ApiURL+'/transaksi/UpdateOvertime',{},{
-        params:{
-            userid:this.props.LogReg.id
-        }
-      })
-      .then((res)=>{
-          console.log(res.data)
-      }).catch((err)=>{
-        console.log(err)
-      })
+      // Axios.put(ApiURL+'/transaksi/UpdateOvertime',{},{
+      //   params:{
+      //       userid:this.props.LogReg.id
+      //   }
+      // })
+      // .then((res)=>{
+      //     console.log(res.data)
+      // }).catch((err)=>{
+      //   console.log(err)
+      // })
     }else{
       this.setState({loading:false})
     }

@@ -41,6 +41,8 @@ class JualReg extends React.Component {
         })
     }
     render() {
+        this.props.ChangeHeader(false)
+
         if(this.props.LogReg.username===''){
             return <Redirect to='/login'></Redirect>
         }

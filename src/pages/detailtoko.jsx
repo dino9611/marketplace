@@ -162,7 +162,7 @@ class DetailToko  extends React.Component {
                             </div>
                             </TabPane>
                             <TabPane tabId='2' className='px-3 py-4'>
-                                dadadadadasdas
+                                fitur belum tersedia
                             </TabPane>
                         </TabContent>
                         </div>

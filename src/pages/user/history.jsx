@@ -9,6 +9,7 @@ import Axios from 'axios'
 import Loading from './../../components/loading'
 import Numeral from 'numeral'
 import querystring from 'query-string'
+import Loader from 'react-loader-spinner'
 
 class History extends React.Component {
     state = {
@@ -22,6 +23,7 @@ class History extends React.Component {
         uploadid:0,
         suksespaymodal:false,
         waktusekarang:null,
+        loadingupload:false
     }
     componentDidMount(){
         this.props.ChangeHeader(false) 
@@ -89,7 +91,7 @@ class History extends React.Component {
         }
     }
     onClickUpload=(paymentid)=>{
-        console.log(paymentid)
+        this.setState({loadingupload:true})
         var formData = new FormData()
         var headers = {
             headers: 
@@ -103,7 +105,7 @@ class History extends React.Component {
         formData.append('data', JSON.stringify(data))
         Axios.put(ApiURL+'/transaksi/editUploadPay/'+paymentid+'?userid='+this.props.LogReg.id,formData,headers)
         .then((res)=>{
-            this.setState({waitingpaymentlist:res.data,modalupload:false,editUploadPayname:'Select Image...',editUplaodPayfile:undefined,suksespaymodal:true})
+            this.setState({waitingpaymentlist:res.data,modalupload:false,editUploadPayname:'Select Image...',editUplaodPayfile:undefined,suksespaymodal:true,loadingupload:false})
         }).catch((err)=>{
 
         })
@@ -312,8 +314,15 @@ class History extends React.Component {
                         <CustomInput id='inputbayar' type='file' className='overflow-hidden mt-2' label={this.state.editUploadPayname} onChange={this.onChangeEditUploadpay}/>
                     </ModalBody>
                     <ModalFooter>
-                        <button className='btn btn-primary'onClick={()=>this.onClickUpload(this.state.uploadid)}>Upload Pembayaran</button>
-                        <button className='btn btn-light' onClick={()=>this.setState({modalupload:false,editUploadPayname:'Select Image...',editUplaodPayfile:undefined})}>Cancel</button>
+                        {
+                            this.state.loadingupload?
+                            <Loader type='Oval' height={30} color="#0275d8" />
+                            :
+                            <div>
+                                <button className='btn btn-primary'onClick={()=>this.onClickUpload(this.state.uploadid)}>Upload Pembayaran</button>
+                                <button className='btn btn-light' onClick={()=>this.setState({modalupload:false,editUploadPayname:'Select Image...',editUplaodPayfile:undefined})}>Cancel</button>
+                            </div>
+                        }
                     </ModalFooter>
                 </Modal>
                 <Modal isOpen={this.state.suksespaymodal} toggle={()=>this.setState({suksespaymodal:false})}>

@@ -5,8 +5,9 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import Axios from 'axios'
 import {faEdit} from '@fortawesome/free-solid-svg-icons'
 import { ApiURL } from '../../supports/apiurl';
+import {Link} from 'react-router-dom'
 import Loading from '../../components/loading';
-
+import Pagenotfound from './../Pagenotfound'
 
 class UserSetting extends Component {
     state = {
@@ -42,6 +43,9 @@ class UserSetting extends Component {
     }
     render() { 
         this.props.ChangeHeader(false)
+        if(this.props.LogReg.username===''){
+            return(<Pagenotfound/>)
+        }
         if(this.state.UserSettingdata){
             return (
                 <div className='home'>
@@ -60,15 +64,20 @@ class UserSetting extends Component {
                                 <div className="col-4 mt-3 pl-3 text-primary">
                                     Status
                                 </div>
-                                <div className="col-4 mt-3">
+                                <div className="col-6 mt-3">
                                     {this.state.UserSettingdata.statusver==='verified'?
                                         <span className='text-success'>
                                             Verified
                                         </span>
                                         :
-                                        <span className='text-danger'>
-                                            Belum Verified
-                                        </span>
+                                        <div>
+                                            <span className='text-danger mr-2'>
+                                                Belum Verified
+                                            </span>
+                                            <Link to='/resendverif'>
+                                                Klik untuk Verified
+                                            </Link>
+                                        </div>
                                     }
                                 </div>
                             </div>

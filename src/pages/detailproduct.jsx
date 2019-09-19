@@ -10,7 +10,7 @@ import { ApiURL } from '../supports/apiurl';
 import Loading from './../components/loading'
 import {Link} from 'react-router-dom'
 import Numeral from 'numeral'
-
+import Loader from 'react-loader-spinner'
 
 class DetailProd extends React.Component {
     state = {
@@ -21,7 +21,10 @@ class DetailProd extends React.Component {
         penjualsama:false,
         modalinfo:false,
         infoisi:'',
-        isialamat:false
+        isialamat:false,
+        belumverif:false,
+        Addtocartload:false,
+        login:false
       }
     componentDidMount(){
         this.props.ChangeHeader(false)
@@ -62,13 +65,20 @@ class DetailProd extends React.Component {
         }   
     }
     onBtnAddToCart=()=>{
+        this.setState({Addtocartload:true})
         if(this.props.LogReg.username===''){
-            this.setState({modalinfo:true,infoisi:'Anda harus Login dahulu'})
-        }else if(this.props.LogReg.alamat===null){
-            this.setState({modalinfo:true,infoisi:'Anda harus Lengkapi data dahulu',isialamat:true})
+            this.setState({modalinfo:true,infoisi:'Anda harus Login dahulu',Addtocartload:false,login:true})
+        }else if(this.props.LogReg.alamat===null&&this.props.LogReg.statusver==='unverified'){
+            this.setState({modalinfo:true,infoisi:'Anda harus Lengkapi data dahulu dan verifikasi akun anda dahulu ',isialamat:true,belumverif:true,Addtocartload:false})
+        }
+        else if(this.props.LogReg.statusver==='unverified'){
+            this.setState({modalinfo:true,infoisi:'Anda harus verifikasi akun anda dahulu ',belumverif:true,login:false,Addtocartload:false})
+        }
+        else if(this.props.LogReg.alamat===null){
+            this.setState({modalinfo:true,infoisi:'Anda harus Lengkapi data dahulu ',isialamat:true,Addtocartload:false})
         }
         else if(this.state.proddata.penjualid===this.props.LogReg.penjualid){
-            this.setState({loginfo:true,penjualsama:true})
+            this.setState({loginfo:true,penjualsama:true,Addtocartload:false})
         }else{
             const token=localStorage.getItem('token')
             const headers={
@@ -86,9 +96,11 @@ class DetailProd extends React.Component {
             .then((res)=>{
                 console.log(res.data)
                 this.props.CountCartnotif(this.props.LogReg.id)
-                this.setState({loginfo:true})
+                this.setState({loginfo:true,Addtocartload:false})
             }).catch((err)=>{
                 console.log(err)
+                this.setState({Addtocartload:false})
+
             })
 
         }
@@ -110,18 +122,28 @@ class DetailProd extends React.Component {
                         {this.state.infoisi}
                     </ModalBody>
                     <ModalFooter className="pt-2">
-                        {this.state.isialamat?
-                            <Link to='/userset'>
-                                <input type='button' value='User Settings'className='btn btn-primary rounded-pill' style={{width:'150px'}} onClick={()=>this.setState({modalinfo:false,infoisi:false,isialamat:false})} />
+                        {
+                            this.state.belumverif?
+                            <Link to='/resendverif'>
+                                <input type='button' value='Verifikasi Akun'className='btn btn-primary rounded-pill' style={{width:'150px'}} onClick={()=>this.setState({modalinfo:false,infoisi:'',isialamat:false})} />
                             </Link>
                             :
-                            
-                            <Link to='/login'>
-                                <input type='button' value='Login'className='btn btn-primary rounded-pill' style={{width:'100px'}} onClick={()=>this.setState({modalinfo:false,infoisi:false,isialamat:false})} />
+                            null
+                        }
+                        {this.state.isialamat?
+                            <Link to='/userset'>
+                                <input type='button' value='User Settings'className='btn btn-primary rounded-pill' style={{width:'150px'}} onClick={()=>this.setState({modalinfo:false,infoisi:'',isialamat:false})} />
                             </Link>
+                            :
+                            this.state.login?
+                            <Link to='/login'>
+                                <input type='button' value='Login'className='btn btn-primary rounded-pill' style={{width:'100px'}} onClick={()=>this.setState({modalinfo:false,infoisi:'',isialamat:false})} />
+                            </Link>
+                            :
+                            null
                             
                         }
-                        <input type='button' value='Cancel'className='btn btn-primary rounded-pill' style={{width:'100px'}} onClick={()=>this.setState({modalinfo:false,infoisi:false,isialamat:false})} />
+                        <input type='button' value='Cancel'className='btn btn-primary rounded-pill' style={{width:'100px'}} onClick={()=>this.setState({modalinfo:false,infoisi:'',isialamat:false,belumverif:false})} />
                     </ModalFooter>
                 </Modal>
                 <Modal isOpen={this.state.loginfo} toggle={()=>this.setState({loginfo:false,penjualsama:false})} className='text-primary font-weight-bolder' centered>
@@ -168,8 +190,14 @@ class DetailProd extends React.Component {
                                     </div>
                                     <div style={{fontSize:21,fontWeight:'bolder',color:'#0275d8'}}>{'Rp.'+Numeral(this.state.proddata.harga*this.state.jumlahorder).format('0,0.00')}</div>
                                     <div className="d-flex justify-content-start mt-5">
-                                        <button className='btn btn-primary rounded ' onClick={this.onBtnAddToCart}>add to cart</button>
-                                        <button className='btn btn-primary rounded ml-4'>add to wishlist</button>
+                                        {
+                                            this.state.Addtocartload?
+                                            <Loader type='Oval' height={30} color="#0275d8" />
+                                            :
+                                            <button className='btn btn-primary rounded ' onClick={this.onBtnAddToCart}>add to cart</button>
+
+                                        }
+                                        {/* <button className='btn btn-primary rounded ml-4'>add to wishlist</button> */}
                                     </div>
                                 </div>
                             </div>
@@ -212,7 +240,7 @@ class DetailProd extends React.Component {
                                         Informasi Product
                                         </NavLink>
                                     </NavItem>
-                                    <NavItem>
+                                    {/* <NavItem>
                                         <NavLink
                                         className={classnames('text-primary', 'tab-prod',{ active: this.state.activeTab === '2',
                                                     'font-weight-bolder': this.state.activeTab === '2'})}
@@ -220,7 +248,7 @@ class DetailProd extends React.Component {
                                         >
                                         Ulasan
                                         </NavLink>
-                                    </NavItem>
+                                    </NavItem> */}
                                 </Nav>
                                 <TabContent activeTab={this.state.activeTab}>
                                     <TabPane tabId='1' className='px-3 py-4'>

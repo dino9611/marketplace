@@ -261,7 +261,7 @@ class Jualanku extends React.Component {
     }
     render() {
         this.props.ChangeHeader(false)
-        if(this.props.LogReg.penjualid===null){
+        if(this.props.LogReg.username===''||this.props.LogReg.penjualid===null){
             return <PagenotFound/>
         }
         if(this.state.listproduct===null){

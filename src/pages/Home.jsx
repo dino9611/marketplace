@@ -7,7 +7,7 @@ import {Link} from 'react-router-dom'
 import Footer from '../components/footer';
 import Fade from 'react-reveal/Fade'
 import {connect} from 'react-redux'
-import {ChangeHeader} from './../redux/actions'
+import {ChangeHeader,CountCartnotif} from './../redux/actions'
 import Numeral from 'numeral'
 // import Header from './../components/header'
 import Axios from 'axios'
@@ -27,6 +27,7 @@ class Home extends Component {
     componentDidMount(){
         this.props.ChangeHeader(true)
         console.log(this.props.changeHead)
+        this.props.CountCartnotif(this.props.LogReg.id)
         Axios.get(`${ApiURL}/product/getallproducthome`)
         .then((res)=>{
             this.setState({listallproduct:res.data})
@@ -146,7 +147,7 @@ class Home extends Component {
                             </div>
                         </div>
                     </div>
-                    <div style={{marginLeft:'5.5%',marginRight:"5.5%"}}>
+                    <div style={{marginLeft:'5.5%',marginRight:"5.5%"}} className='product-home'>
                         <Slider {...settings}>
                             {this.renderallproduct()}
                         </Slider>  
@@ -168,4 +169,4 @@ const MapStateToProps=(state)=>{
         LogReg:state.LogReg
     }
 }
-export default connect(MapStateToProps,{ChangeHeader})(Home);
+export default connect(MapStateToProps,{ChangeHeader,CountCartnotif})(Home);

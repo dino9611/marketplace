@@ -8,7 +8,8 @@ import Axios from 'axios'
 import { ApiURL } from '../../supports/apiurl';
 import Numeral from 'numeral'
 import Loading from './../../components/loading'
-
+import Pagenotfound from './../Pagenotfound'
+import Loader from 'react-loader-spinner'
 // import {Redirect} from 'react-router-dom'
 
 class Cart extends React.Component {
@@ -18,7 +19,8 @@ class Cart extends React.Component {
         deletemodal:false,
         modaldeleteindex:-1,
         checkoutmodal:false,
-        payedmodal:false
+        payedmodal:false,
+        Loadingpay:false
       }
     componentDidMount(){
         this.props.ChangeHeader(false) 
@@ -86,6 +88,7 @@ class Cart extends React.Component {
         })
     }
     onBtnPayClick=()=>{
+        this.setState({Loadingpay:true})
         var data={
             cart:this.state.cartlist,
             totalharga:this.rendertotalhargacart()
@@ -94,7 +97,8 @@ class Cart extends React.Component {
         Axios.put(ApiURL+'/transaksi/aftercheckout/'+this.props.LogReg.id,data)
         .then((res)=>{
             console.log(res.data)
-            this.setState({cartlist:res.data,cpayedmodal:true,checkoutmodal:false})
+            this.props.CountCartnotif(this.props.LogReg.id)
+            this.setState({cartlist:res.data,cpayedmodal:true,checkoutmodal:false,Loadingpay:false})
         }).catch((err)=>{
             console.log(err)
         })
@@ -132,7 +136,7 @@ class Cart extends React.Component {
                     <input type="number" value={item.quantity} onChange={this.onOrderChange} className='text-center input-beli'/>
                     <button className=' btn  btn-primary font-weight-bold py-0' style={{fontSize:'12px'}} onClick={()=>this.onPlususcartlistquantity(index,item.id)}>+</button>
                 </td>
-                <td>{'Rp.'+Numeral(item.harga*item.quantity).format('0,0.00')}</td>
+                <td>{'Rp.'+Numeral(item.harga*item.quantity).format('0,0')}</td>
                 <td><button className='btn btn-danger' onClick={()=>this.setState({deletemodal:true,modaldeleteindex:index})}>delete</button></td>
             </tr>
             )
@@ -167,7 +171,7 @@ class Cart extends React.Component {
                 <th>{item.nama}</th>
                 <th>{item.namatoko}</th>
                 <th>{item.quantity}</th>
-                <th>{'Rp.'+Numeral(item.harga*item.quantity).format('0,0.00')}</th>
+                <th>{'Rp.'+Numeral(item.harga*item.quantity).format('0,0')}</th>
             </tr>
             )
         })
@@ -183,12 +187,14 @@ class Cart extends React.Component {
     }
     render() {
         this.props.ChangeHeader(false)
+        if(this.props.LogReg.username===''){
+            return(<Pagenotfound/>)
+        }
         if(this.state.cartlist===null){
             return(
                 <Loading/>
             )
         }
-
         return (
             <div className='home' >
                 <Table className='home' striped hover>
@@ -237,15 +243,23 @@ class Cart extends React.Component {
                                     <th></th>
                                     <th></th>
                                     <th>Total Belanja</th>
-                                    <th>{'Rp.'+Numeral(this.rendertotalhargacart()).format('0,0.00')}</th>
+                                    <th>{'Rp.'+Numeral(this.rendertotalhargacart()).format('0,0')}</th>
                                 </tr>
                                 
                             </tfoot>
                         </Table>
                     </ModalBody>
                     <ModalFooter>
-                        <button className='btn btn-primary' onClick={this.onBtnPayClick} >Pay</button>
-                        <button className='btn btn-light' onClick={()=>this.setState({checkoutmodal:false})}>Cancel</button>
+                        {
+                            this.state.Loadingpay?
+                            <Loader type='Oval' height={30} color="#0275d8" />
+                            :
+                            <div>
+                                <button className='btn btn-primary' onClick={this.onBtnPayClick} >Pay</button>
+                                <button className='btn btn-light' onClick={()=>this.setState({checkoutmodal:false})}>Cancel</button>
+                            </div>
+
+                        }
                     </ModalFooter>
                 </Modal>
                 <Modal>

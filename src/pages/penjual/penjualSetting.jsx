@@ -7,6 +7,7 @@ import Axios from 'axios'
 import {faEdit} from '@fortawesome/free-solid-svg-icons'
 import { ApiURL } from '../../supports/apiurl';
 import Loading from '../../components/loading';
+import Pagenotfound from './../Pagenotfound'
 
 class PenjualSetting extends Component {
     state = {
@@ -133,6 +134,9 @@ class PenjualSetting extends Component {
     }
     render() {
         this.props.ChangeHeader(false)
+        if(this.props.LogReg.username===''||this.props.LogReg.penjualid===null){
+            return(<Pagenotfound/>)
+        }
         if(this.state.Sellersettingsdata){
             return (
                 <div className='home'>

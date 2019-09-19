@@ -10,11 +10,12 @@ import { ApiURL } from '../../supports/apiurl'
 import Loading from './../../components/loading'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faEdit} from '@fortawesome/free-solid-svg-icons'
+import Pagenotfound from '../Pagenotfound';
+import Loader from 'react-loader-spinner'
 
-// import Pagenotfound from '../Pagenotfound';
 class ManageAdmin extends React.Component {
     state = {
-        activeTab: '1',
+        activeTab: '3',
         confirmpaylist:null,
         imageurlselected:'',
         Modalimage:false,
@@ -43,11 +44,14 @@ class ManageAdmin extends React.Component {
         iklan:null,
         iklanimagefilename:'Select iklan image...',
         iklanimagefile:undefined,
+        editIklanfilename:'Select iklan image...',
+        editIklanfile:undefined,
         Modaliklan:false,
         deleteiklan:-1,
+        editiklan:-1,
         deletecatpen:-1,
-        deletecatprod:-1
-
+        deletecatprod:-1,
+        Konfirmasipayload:false
       }
     componentDidMount(){
         this.props.ChangeHeader(false)
@@ -99,15 +103,17 @@ class ManageAdmin extends React.Component {
         }   
     }
     onBtnKonfirmasipayment=()=>{
+        this.setState({Konfirmasipayload:true})
         var data={
             userid:this.state.paymentuserid,
             paymentid:this.state.paymentid
         }
         Axios.post(ApiURL+'/transaksi/Postadminconfirmed',data)
         .then((res)=>{
-            this.setState({confirmpaylist:res.data,Modalkonfirmasi:false,suksespaymodal:true})
+            this.setState({confirmpaylist:res.data,Modalkonfirmasi:false,suksespaymodal:true,Konfirmasipayload:false})
         }).catch((err)=>{
             console.log(err)
+            this.setState({Konfirmasipayload:false})
         })
     }
     onBtnCanceledPaymenClick=()=>{
@@ -265,8 +271,43 @@ class ManageAdmin extends React.Component {
         if(file){
             this.setState({iklanimagefilename:file.name,iklanimagefile:event.target.files[0]})
         }else{
-            this.setState({iklanimagefilename:'Select Image....',iklanimagefile:undefined})
+            this.setState({iklanimagefilename:'Select Iklan Image....',iklanimagefile:undefined})
         }
+    }
+    onEditIklanFileChange=(event)=>{
+        var file=event.target.files[0]
+        if(file){
+            this.setState({editIklanfilename:file.name,editIklanfile:event.target.files[0]})
+        }else{
+            this.setState({editIklanfilename:'Select iklan Image....',editIklanfile:undefined})
+        }
+    }
+    onUpdateIklanClick=(id)=>{
+        var formData = new FormData()
+        var headers = {
+            headers: 
+            {'Content-Type': 'multipart/form-data'},
+            params:{
+                id:id
+            }
+        }
+        var data = {
+
+        }
+
+        formData.append('image', this.state.editIklanfile)
+        formData.append('data', JSON.stringify(data))
+        console.log(id)
+        Axios.put(ApiURL + "/admin/SaveEditIklanhome", formData, headers)
+        .then((res) => {
+            console.log(res.data)
+            this.setState({iklan:res.data,editiklan:-1,editIklanfilename:'Select iklan Image....',editIklanfile:undefined})
+        })
+        .catch((err) =>{
+            console.log(err)
+            this.setState({editiklan:-1,editIklanfilename:'Select iklan Image....',editIklanfile:undefined})
+
+        })
     }
     onAddIklanClick=()=>{
         var formData = new FormData()
@@ -322,7 +363,7 @@ class ManageAdmin extends React.Component {
                     <tr key={item.id}>
                         <td>{index+1}</td>
                         <td>{item.id}</td>
-                        <td><img src={ApiURL+item.image} alt="" width='200' onClick={()=>this.setState({Modalimage:true,imageurlselected:ApiURL+item.image})}/></td>
+                        <td><img src={ApiURL+item.image} alt="" width='200' onClick={()=>this.setState({Modalimage:true,imageurlselected:ApiURL+item.image})} className='pointer-add'/></td>
                         <td>{item.userid}</td>
                         <td>{'Rp.'+Numeral(item.totalharga).format('0,0')}</td>
                         <td><button className='btn btn-primary'onClick={()=>this.setState({Modalkonfirmasi:true,paymentid:item.id,paymentuserid:item.userid})}>Konfirmasi Pembelian</button></td>
@@ -436,7 +477,7 @@ class ManageAdmin extends React.Component {
             return this.state.iklan.map((item,index)=>{
                 if(this.state.deleteiklan===item.id){
                     return(
-                        <tr key={item.id}>
+                    <tr key={item.id}>
                         <td>{index+1}</td>
                         <td><img src={ApiURL+item.iklanimage} alt="" height='120px'/></td>
                         <td><button className='btn btn-primary' onClick={()=>this.onDeleteIklanClick(item.id)}>Yes</button></td>
@@ -445,14 +486,22 @@ class ManageAdmin extends React.Component {
                     </tr>
                     )
                 }
+                if(this.state.editiklan===item.id){
+                    return(
+                        <tr key={item.id}>
+                            <td>{index+1}</td>
+                            <td><CustomInput type='file' className='overflow-hidden mt-2' label={this.state.editIklanfilename} onChange={this.onEditIklanFileChange} /></td>
+                            <td><button className='btn btn-primary'onClick={()=>this.onUpdateIklanClick(item.id)}>Save</button></td>
+                            <td><button className='btn btn-light' onClick={()=>this.setState({editiklan:-1,editIklanfilename:'Select iklan Image....',editIklanfile:undefined})}>Cancel</button></td>
+                        </tr>
+                    )
+                }
                 return(
                 <tr key={item.id}>
                     <td>{index+1}</td>
                     <td><img src={ApiURL+item.iklanimage} alt="" height='120px'/></td>
-                    
-                    <td><button className='btn btn-primary'>Edit</button></td>
+                    <td><button className='btn btn-primary' onClick={()=>this.setState({editiklan:item.id})}>Edit</button></td>
                     <td><button className='btn btn-light' onClick={()=>this.setState({deleteiklan:item.id})} >Delete</button></td>
-                    
                 </tr>
                 )
             })
@@ -460,6 +509,9 @@ class ManageAdmin extends React.Component {
     }
     render() {
         this.props.ChangeHeader(false)
+        if(this.props.LogReg.roleid===3||this.props.LogReg.username===''||this.props.LogReg.penjualid===null){
+            return(<Pagenotfound/>)
+        }
         if(this.state.confirmpaylist===null||this.state.Homeimage===null){
             return <Loading/>
         }
@@ -626,7 +678,7 @@ class ManageAdmin extends React.Component {
                     </div>
                 </TabPane>
                 <TabPane tabId='2' className='px-3 py-4'>
-                    dadadadadasdas
+                    Fitur Belum tersedia akan menyusul
                 </TabPane>
                 <TabPane tabId='3' className='px-3 py-4'>
                     <div className="mx-1">
@@ -755,8 +807,15 @@ class ManageAdmin extends React.Component {
                     Konfirmasi pembayaran dengan nomor pembayaran:{this.state.paymentid} dan nomer user:{this.state.paymentuserid} (Pastikan anda sudah benar dalam pengecekan pembayaran)
                 </ModalBody>
                 <ModalFooter>
-                    <button className='btn btn-primary' onClick={this.onBtnKonfirmasipayment} >Konfirmasi</button>
-                    <button className='btn btn-light' onClick={()=>this.setState({Modalkonfirmasi:false})}>Cancel</button>
+                    {
+                        this.state.Konfirmasipayload?
+                        <Loader type='Oval' height={30} color="#0275d8" />
+                        :
+                        <div>
+                            <button className='btn btn-primary' onClick={this.onBtnKonfirmasipayment} >Konfirmasi</button>
+                            <button className='btn btn-light' onClick={()=>this.setState({Modalkonfirmasi:false})}>Cancel</button>
+                        </div>
+                    }
                 </ModalFooter>
             </Modal>
             <Modal isOpen={this.state.suksespaymodal} toggle={()=>this.setState({suksespaymodal:false})}>
@@ -776,5 +835,10 @@ class ManageAdmin extends React.Component {
         );
     }
 }
- 
-export default connect(null,{ChangeHeader}) (ManageAdmin);
+const MapStateToProps=(state)=>{
+    return{
+        changeHead:state.HeaderBg,
+        LogReg:state.LogReg
+    }
+}
+export default connect(MapStateToProps,{ChangeHeader}) (ManageAdmin);

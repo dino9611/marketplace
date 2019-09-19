@@ -6,6 +6,8 @@ import querystring from 'query-string'
 import Axios from 'axios'
 import { ApiURL } from '../../supports/apiurl';
 import Loading from '../../components/loading'
+import Pagenotfound from './../Pagenotfound'
+import Loader from 'react-loader-spinner'
 
 
 class PenjualTransaksi extends Component {
@@ -19,7 +21,9 @@ class PenjualTransaksi extends Component {
         ModalCancelProses:false,
         Modalmes:false,
         ModalonSent:false,
-        Modalberhasilmes:''
+        Modalberhasilmes:'',
+        prosespesananload:false,
+        kirimload:false
       }
     componentDidMount(){
         this.props.ChangeHeader(false)
@@ -63,6 +67,7 @@ class PenjualTransaksi extends Component {
         }
     }
     onBtnprosesClick=()=>{
+        this.setState({prosespesananload:true})
         Axios.put(ApiURL+'/transaksi/PutonProsestransaksi',{
             penjualid:this.props.LogReg.penjualid,
             transaksiid:this.state.Prosesitemid,
@@ -70,12 +75,13 @@ class PenjualTransaksi extends Component {
             userid:this.state.ProsesUserid
         })
         .then((res)=>{
-            this.setState({Modalmes:true,ModalProses:false,Modalberhasilmes:'Proses berhasil ditambahkan ke tabel proses',Pentransaksilist:res.data})
+            this.setState({Modalmes:true,ModalProses:false,Modalberhasilmes:'Proses berhasil ditambahkan ke tabel proses',Pentransaksilist:res.data,prosespesananload:false})
         }).catch((err)=>{
             console.log(err)
         })
     }
     onBtnOnsentClick=()=>{
+        this.setState({kirimload:true})
         Axios.put(ApiURL+'/transaksi/putOnsentTransaksi',{
             penjualid:this.props.LogReg.penjualid,
             transaksiid:this.state.Prosesitemid,
@@ -83,7 +89,7 @@ class PenjualTransaksi extends Component {
             userid:this.state.ProsesUserid
         })
         .then((res)=>{
-            this.setState({Modalmes:true,ModalonSent:false,Modalberhasilmes:'Proses berhasil pesan akan disampaikan ke user bersangkutan',Pentransaksilist:res.data})
+            this.setState({Modalmes:true,ModalonSent:false,Modalberhasilmes:'Proses berhasil pesan akan disampaikan ke user bersangkutan',Pentransaksilist:res.data,kirimload:false})
         }).catch((err)=>{
             console.log(err)
         })
@@ -149,6 +155,9 @@ class PenjualTransaksi extends Component {
     }
     render(){
         this.props.ChangeHeader(false)
+        if(this.props.LogReg.username===''||this.props.LogReg.penjualid===null){
+            return(<Pagenotfound/>)
+        }
         if(this.state.Pentransaksilist===null){
             return <Loading/>
         }
@@ -202,8 +211,16 @@ class PenjualTransaksi extends Component {
                         Proses produk dengan nama {this.state.Produkselected} 
                     </ModalBody>
                     <ModalFooter>
-                        <button className='btn btn-primary' onClick={this.onBtnprosesClick}>Proses Pesanan</button>
-                        <button className='btn btn-light' onClick={()=>this.setState({ModalProses:false,Prosesitemid:0,ProsesPaymentid:0})}>Cancel</button>
+                    {
+                            this.state.prosespesananload?
+                            <Loader type='Oval' height={30} color="#0275d8" />
+                            :
+                            <div>
+                                <button className='btn btn-primary' onClick={this.onBtnprosesClick}>Proses Pesanan</button>
+                                <button className='btn btn-light' onClick={()=>this.setState({ModalProses:false,Prosesitemid:0,ProsesPaymentid:0})}>Cancel</button>
+                            </div>
+
+                    }
                     </ModalFooter>
                 </Modal>
                 <Modal isOpen={this.state.ModalonSent} toggle={()=>this.setState({ModalonSent:false,Prosesitemid:0,ProsesPaymentid:0})}>
@@ -214,8 +231,16 @@ class PenjualTransaksi extends Component {
                         Kirim produk dengan nama {this.state.Produkselected} 
                     </ModalBody>
                     <ModalFooter>
-                        <button className='btn btn-primary' onClick={this.onBtnOnsentClick}>Kirim</button>
-                        <button className='btn btn-light' onClick={()=>this.setState({ModalonSent:false,Prosesitemid:0,ProsesPaymentid:0})}>Cancel</button>
+                    {
+                        this.state.kirimload?
+                        <Loader type='Oval' height={30} color="#0275d8" />
+                        :
+                        <div>
+                            <button className='btn btn-primary' onClick={this.onBtnOnsentClick}>Kirim</button>
+                            <button className='btn btn-light' onClick={()=>this.setState({ModalonSent:false,Prosesitemid:0,ProsesPaymentid:0})}>Cancel</button>
+                        </div>
+
+                    }
                     </ModalFooter>
                 </Modal>
                 <Modal isOpen={this.state.Modalmes} toggle={()=>this.setState({Modalmes:false})}>

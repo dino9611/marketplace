@@ -17,8 +17,8 @@ import {faShoppingCart,faSearch,faBell,faStore,faUser} from '@fortawesome/free-s
 import {connect} from 'react-redux'
 import {ChangeHeader,LogOutSuccess,RegLogSucces,CountCartnotif,Categorylistload} from './../redux/actions'
 
-// import Axios from 'axios'
-// import { ApiURL } from '../supports/apiurl';
+import Axios from 'axios'
+import { ApiURL } from '../supports/apiurl';
 // import { ApiURL } from '../supports/apiurl';
 
 
@@ -41,6 +41,16 @@ class Header extends React.Component {
 
       this.props.CountCartnotif(this.props.LogReg.id)
       this.props.Categorylistload()
+      Axios.put(ApiURL+'/transaksi/UpdateOvertime',{},{
+        params:{
+            userid:this.props.LogReg.id
+        }
+      })
+      .then((res)=>{
+          console.log(res.data)
+      }).catch((err)=>{
+        console.log(err)
+      })
   }
   // componentDidUpdate(){
   //   this.props.CountCartnotif(this.props.LogReg.id)    
@@ -208,9 +218,11 @@ class Header extends React.Component {
                         }
                      
                           <DropdownItem divider />
-                          <DropdownItem onClick={this.onlogout}>
-                            <a href="http://localhost:3000/">LogOut</a>
-                          </DropdownItem>
+                          <a href="http://localhost:3000/" onClick={this.onlogout}>
+                            <DropdownItem onClick={this.onlogout}>
+                                LogOut
+                            </DropdownItem>
+                          </a>
                         </DropdownMenu>
                       </UncontrolledDropdown>
                   </Nav>

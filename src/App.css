@@ -34,6 +34,26 @@
   color: var(--primary-color) !important
 }
 /* iklan end */
+/* producthome start */
+.product-home .slick-prev:before,
+.product-home .slick-next:before
+{
+    color: var(--primary-color) !important; 
+    outline: none;
+    background: transparent;
+    font-size: 20px !important;
+}
+
+.product-home .slick-dots li button:before{
+  color: var(--primary-color) !important;
+}
+.product-home .slick-dots li.slick-active button:before{
+  color: var(--primary-color) !important
+}
+
+
+
+/* producthome end */
 /* navbar */
 .navbar-posisi{
   position: fixed;

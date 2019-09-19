@@ -50,7 +50,7 @@ class Register extends React.Component {
             }else{
                 this.setState({loading:true})
                 //ngecek username udah ada atau belum
-                Axios.get(ApiURL+'/users/cekuser?username='+username)
+                Axios.get(ApiURL+'/users/cekuserregister?username='+username)
                 .then((res)=>{
                     if(res.data.length>0){
                         this.setState({loading:false})

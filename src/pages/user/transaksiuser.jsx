@@ -8,6 +8,9 @@ import { ApiURL } from '../../supports/apiurl';
 import Axios from 'axios'
 import Loading from './../../components/loading'
 import querystring from 'query-string'
+import Pagenotfound from './../Pagenotfound'
+import Loader from 'react-loader-spinner'
+
 
 class TransaksiUser extends React.Component {
     state = {
@@ -16,7 +19,8 @@ class TransaksiUser extends React.Component {
         Modalmes:false,
         Modalberhasilmes:'',
         Transaksiid:0,
-        transaksiprodname:''
+        transaksiprodname:'',
+        PesananSampaiload:false
       }
     componentDidMount(){
         this.props.ChangeHeader(false) 
@@ -62,13 +66,14 @@ class TransaksiUser extends React.Component {
 
     }
     onBtnPesananSampai=()=>{
+        this.setState({PesananSampaiload:true})
         var data={
             userid:this.props.LogReg.id,
             transaksiid:this.state.Transaksiid
         }
         Axios.put(ApiURL+'/transaksi/PutStatusPesananSampai',data)
         .then((res)=>{
-            this.setState({TransaksiList:res.data,Modalmes:true,Modalberhasilmes:'Berhasil mengupdate data',ModalSampai:false})
+            this.setState({TransaksiList:res.data,Modalmes:true,Modalberhasilmes:'Berhasil mengupdate data',ModalSampai:false,PesananSampaiload:false})
         }).catch((err)=>{
             console.log(err)
         })
@@ -186,6 +191,9 @@ class TransaksiUser extends React.Component {
     }    
     render() {
         this.props.ChangeHeader(false)
+        if(this.props.LogReg.username===''){
+            return(<Pagenotfound/>)
+        }
         if(this.state.TransaksiList===null){
             return <Loading/>
         }  
@@ -237,8 +245,15 @@ class TransaksiUser extends React.Component {
                         Apakah kamu yakin produk dengan nama {this.state.transaksiprodname} sudah sampai
                     </ModalBody>
                     <ModalFooter>
-                        <button className='btn btn-primary' onClick={this.onBtnPesananSampai} >Ya</button>
-                        <button className='btn btn-light' onClick={()=>this.setState({ModalSampai:false})}>Tidak</button>
+                        {
+                            this.state.PesananSampaiload?
+                            <Loader type='Oval' height={30} color="#0275d8" />
+                            :
+                            <div>
+                                <button className='btn btn-primary' onClick={this.onBtnPesananSampai} >Ya</button>
+                                <button className='btn btn-light' onClick={()=>this.setState({ModalSampai:false})}>Tidak</button>
+                            </div>
+                        }
                     </ModalFooter>
                 </Modal>
                 <Modal isOpen={this.state.Modalmes} toggle={()=>this.setState({Modalmes:false})}>

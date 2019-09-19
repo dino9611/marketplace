@@ -6,6 +6,8 @@ import Axios from 'axios';
 import {Table,
 } from 'reactstrap'
 import { ApiURL } from '../../supports/apiurl';
+import Pagenotfound from './../Pagenotfound'
+
 class Notif extends Component {
     state = {
         NotifList:null,
@@ -66,11 +68,14 @@ class Notif extends Component {
 
     render() {
         this.props.ChangeHeader(false)
+        if(this.props.LogReg.username===''){
+            return(<Pagenotfound/>)
+        }
         if(this.state.NotifList===null){
             return <Loading/>
         }  
         return (
-            <div className='home'>
+            <div className='home kontainer'>
                 <Table className='mt-2' striped hover>
                     <thead>
                         <tr>
@@ -82,7 +87,7 @@ class Notif extends Component {
                         {this.renderlistnotif()}
                     </tbody>
                 </Table>
-                <button onClick={this.onbtnlebih}>lebih</button>
+                <button onClick={this.onbtnlebih} className='btn btn-primary'>Lebih</button>
             </div>
          );
     }

@@ -88,7 +88,7 @@ class Login extends React.Component {
                                 }
                                 {
                                     this.state.loading===false?<input type='button' onClick={this.onBtnLoginclick} className=' btn btn-primary rounded-pill ml-4' value='Login'/>:
-                                    <Loader type="ThreeDots" color="#428bca" />
+                                    <Loader type="ThreeDots" color="#0275d8" />
                                 }
                             </div>
                                 <p className=' mt-3' style={{fontStyle:'italic'}}>
