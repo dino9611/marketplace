@@ -40,6 +40,7 @@ class PenjualTransaksi extends Component {
                     penjualid:this.props.LogReg.penjualid
                 }
             }).then((res)=>{
+                console.log(res.data)
                 this.setState({Pentransaksilist:res.data})
             }).catch((err)=>{
                 console.log(err)
@@ -107,20 +108,72 @@ class PenjualTransaksi extends Component {
             console.log(err)
         })
     }
-    renderPentransaksiList=()=>{
+    rendertablelist=()=>{
         if(querystring.parse(this.props.location.search).stat==='waitingproses'){
-            return this.state.Pentransaksilist.map((item,index)=>{
+            if(this.state.Pentransaksilist.payment.length===0){
                 return(
-                    <tr key={item.id}>
-                        <td>{index+1}</td>
-                        <td>{item.nama}</td>
-                        <td>{item.quantity}</td>
-                        <td>{item.userid}</td>
-                        <td>{item.username}</td>
-                        <td><button className='btn btn-primary' onClick={()=>this.setState({ModalProses:true,Prosesitemid:item.id,ProsesPaymentid:item.paymentid,Produkselected:item.nama,ProsesUserid:item.userid})}>Proses Pesanan</button></td>
-                        <td><button className='btn btn-light' onClick={()=>this.setState({ModalCancelProses:true,Prosesitemid:item.id,ProsesPaymentid:item.paymentid,Produkselected:item.nama,ProsesUserid:item.userid})} >Batalkan Proses</button></td>
-                    </tr>
+                    <Table className='mt-2' striped>
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Produk</th>
+                            <th>Jumlah Pesanan</th>
+                            <th>User Id</th>
+                            <th>Username</th>
+                            {querystring.parse(this.props.location.search).stat==='waitingsent'?<th>Alamat Pengiriman</th>:null}
+                            {/* <th></th>
+                            <th></th> */}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        data kosong
+                    </tbody>
+                </Table>
                 )
+            }
+            return this.state.Pentransaksilist.payment.map((item,index)=>{
+                return(
+                <Table className='mt-2' key={index} striped>
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Produk</th>
+                            <th>Jumlah Pesanan</th>
+                            <th>User Id</th>
+                            <th>Username</th>
+                            {querystring.parse(this.props.location.search).stat==='waitingsent'?<th>Alamat Pengiriman</th>:null}
+                            {/* <th></th>
+                            <th></th> */}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {this.renderPentransaksiList(item.paymentid)}
+                    </tbody>
+                    <tfoot>
+                        <td><button className='btn btn-primary' onClick={()=>this.setState({ModalProses:true,Prosesitemid:item.id,ProsesPaymentid:item.paymentid,Produkselected:item.paymentid,ProsesUserid:item.userid})}>Proses Pesanan</button></td>
+                        <td><button className='btn btn-light' onClick={()=>this.setState({ModalCancelProses:true,Prosesitemid:item.id,ProsesPaymentid:item.paymentid,Produkselected:item.paymentid,ProsesUserid:item.userid})} >Batalkan Proses</button></td>
+                    </tfoot>
+                </Table>
+                )
+            })
+        }
+    }
+    renderPentransaksiList=(id)=>{
+        if(querystring.parse(this.props.location.search).stat==='waitingproses'){
+            return this.state.Pentransaksilist.detail.map((item,index)=>{
+                if(item.paymentid===id){
+                    return(
+                        <tr key={item.id}>
+                            <td>{index+1}</td>
+                            <td>{item.nama}</td>
+                            <td>{item.quantity}</td>
+                            <td>{item.userid}</td>
+                            <td>{item.username}</td>
+                            {/* <td><button className='btn btn-primary' onClick={()=>this.setState({ModalProses:true,Prosesitemid:item.id,ProsesPaymentid:item.paymentid,Produkselected:item.nama,ProsesUserid:item.userid})}>Proses Pesanan</button></td>
+                            <td><button className='btn btn-light' onClick={()=>this.setState({ModalCancelProses:true,Prosesitemid:item.id,ProsesPaymentid:item.paymentid,Produkselected:item.nama,ProsesUserid:item.userid})} >Batalkan Proses</button></td> */}
+                        </tr>
+                    )
+                }
             })
         }else if(querystring.parse(this.props.location.search).stat==='waitingsent'){
             return this.state.Pentransaksilist.map((item,index)=>{
@@ -174,23 +227,27 @@ class PenjualTransaksi extends Component {
                         <button className='mr-2 btn btn-primary'disabled={querystring.parse(this.props.location.search).stat==='finished'?true:false}>List Sukses</button>
                     </a>
                 </div>
-                <Table className='mt-2' striped>
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Nama Produk</th>
-                            <th>Jumlah Pesanan</th>
-                            <th>User Id</th>
-                            <th>Username</th>
-                            {querystring.parse(this.props.location.search).stat==='waitingsent'?<th>Alamat Pengiriman</th>:null}
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.renderPentransaksiList()}
-                    </tbody>
-                </Table>
+                {querystring.parse(this.props.location.search).stat==='waitingproses'?
+                    this.rendertablelist()
+                    :
+                    <Table className='mt-2' striped>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Produk</th>
+                                <th>Jumlah Pesanan</th>
+                                <th>User Id</th>
+                                <th>Username</th>
+                                {querystring.parse(this.props.location.search).stat==='waitingsent'?<th>Alamat Pengiriman</th>:null}
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.renderPentransaksiList()}
+                        </tbody>
+                    </Table>
+                }
                 <Modal  isOpen={this.state.ModalCancelProses} toggle={()=>this.setState({ModalCancelProses:false,Prosesitemid:0,ProsesPaymentid:0})}>
                     <ModalHeader>
                         Batalkan Proses
@@ -208,7 +265,7 @@ class PenjualTransaksi extends Component {
                         Proses Pesanan
                     </ModalHeader>
                     <ModalBody>
-                        Proses produk dengan nama {this.state.Produkselected} 
+                        Proses produk dengan paymentid {this.state.Produkselected} 
                     </ModalBody>
                     <ModalFooter>
                     {
