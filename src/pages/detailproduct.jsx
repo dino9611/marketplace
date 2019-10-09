@@ -11,6 +11,13 @@ import Loading from './../components/loading'
 import {Link} from 'react-router-dom'
 import Numeral from 'numeral'
 import Loader from 'react-loader-spinner'
+import {
+    FacebookShareButton,
+    // FacebookShareCount,
+    FacebookIcon,
+    WhatsappShareButton,
+    WhatsappIcon
+} from 'react-share';
 
 class DetailProd extends React.Component {
     state = {
@@ -197,6 +204,14 @@ class DetailProd extends React.Component {
                                             <button className='btn btn-primary rounded ' onClick={this.onBtnAddToCart}>add to cart</button>
 
                                         }
+                                        <FacebookShareButton className='ml-5' url={'https://ui-image-lian.herokuapp.com'}>
+                                            <FacebookIcon size='30'/>
+                                        </FacebookShareButton>
+                                        <WhatsappShareButton className='ml-5'  url={'https://ui-image-lian.herokuapp.com'}>
+                                            <WhatsappIcon size='30'/>
+                                        </WhatsappShareButton>
+                                        
+                                        
                                         {/* <button className='btn btn-primary rounded ml-4'>add to wishlist</button> */}
                                     </div>
                                 </div>
@@ -277,4 +292,4 @@ const MapStateToProps=(state)=>{
         LogReg:state.LogReg
     }
   } 
-export default connect(MapStateToProps,{ChangeHeader,CountCartnotif}) (DetailProd);
+export default connect(MapStateToProps,{ChangeHeader,CountCartnotif})(DetailProd);

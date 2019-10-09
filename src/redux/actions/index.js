@@ -1,5 +1,6 @@
 import Axios from 'axios'
 import { ApiURL } from '../../supports/apiurl';
+import io from 'socket.io-client';
 
 
 export const ChangeHeader =(bole)=>{
@@ -21,6 +22,11 @@ export const LogOutSuccess=()=>{
 }
 export const CountCartnotif=(idusers)=>{
     return (dispatch)=>{
+        const socket = io(ApiURL);
+        socket.on('countnotif',(notif)=>{
+            console.log(notif)
+            dispatch({type:'COUNT_NOTIF',payload:notif.jumlahnotif})
+        });
         Axios.get(ApiURL+'/cart/getcountcart/'+idusers)
         .then((res1)=>{
             Axios.get(ApiURL+'/cart/getcountNotif/'+idusers)

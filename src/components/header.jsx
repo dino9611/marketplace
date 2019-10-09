@@ -16,6 +16,8 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faShoppingCart,faSearch,faBell,faStore,faUser} from '@fortawesome/free-solid-svg-icons'
 import {connect} from 'react-redux'
 import {ChangeHeader,LogOutSuccess,RegLogSucces,CountCartnotif,Categorylistload} from './../redux/actions'
+import io from 'socket.io-client';
+
 
 import Axios from 'axios'
 import { ApiURL } from '../supports/apiurl';
@@ -38,6 +40,8 @@ class Header extends React.Component {
     };
   }
   componentDidMount(){
+
+
 
       this.props.CountCartnotif(this.props.LogReg.id)
       this.props.Categorylistload()
