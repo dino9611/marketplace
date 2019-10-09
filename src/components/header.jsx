@@ -42,8 +42,9 @@ class Header extends React.Component {
   componentDidMount(){
 
 
-
-      this.props.CountCartnotif(this.props.LogReg.id)
+      if(this.props.LogReg.id){
+        this.props.CountCartnotif(this.props.LogReg.id)
+      }
       this.props.Categorylistload()
       Axios.put(ApiURL+'/transaksi/UpdateOvertime',{},{
         params:{
